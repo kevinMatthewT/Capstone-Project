@@ -16,9 +16,11 @@ const express_1 = __importDefault(require("express"));
 const dotenv_1 = __importDefault(require("dotenv"));
 const mongoose_1 = __importDefault(require("mongoose"));
 const InvestorSchema_1 = __importDefault(require("./models/InvestorSchema"));
+const cors_1 = __importDefault(require("cors"));
 dotenv_1.default.config();
 const app = (0, express_1.default)();
 const port = process.env.PORT;
+app.use((0, cors_1.default)());
 app.use(express_1.default.json());
 const ConnectionString = process.env.CONNECTION_DETAILS;
 mongoose_1.default.connect("mongodb://localhost:27017/techasia")

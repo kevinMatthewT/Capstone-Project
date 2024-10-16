@@ -2,11 +2,13 @@ import express, {Express, Request, Response } from 'express';
 import dotenv from 'dotenv'
 import mongoose from 'mongoose';
 import Investment from './models/InvestorSchema';
+import cors from 'cors';
 
 dotenv.config();
 
 const app: Express=express();
 const port = process.env.PORT;
+app.use(cors());
 app.use(express.json());
 const ConnectionString = process.env.CONNECTION_DETAILS;
 
