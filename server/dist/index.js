@@ -40,6 +40,28 @@ app.get("/api/get/investment", (req, res, next) => __awaiter(void 0, void 0, voi
         next(res.status(500).json({ error: "Investments not found" }));
     }
 }));
+app.get("/api/get/investment/Company/filter:filtername", (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const filtername = req.params.filtername;
+        const allInvestments = yield InvestorSchema_1.default.find({ Company: { $regex: filtername } });
+        res.status(200).json(allInvestments);
+    }
+    catch (error) {
+        console.error(error);
+        next(res.status(500).json({ error: "Investments not found" }));
+    }
+}));
+app.get("/api/get/investment/Domicile/filter:filtername", (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const filtername = req.params.filtername;
+        const allInvestments = yield InvestorSchema_1.default.find({ Domicile: { $regex: filtername } });
+        res.status(200).json(allInvestments);
+    }
+    catch (error) {
+        console.error(error);
+        next(res.status(500).json({ error: "Investments not found" }));
+    }
+}));
 //post operations
 app.post("/api/post/investment", (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     const { Company, Domicile, Year_Of_Operation, Business, Percentage_Ownership, Price_Asset, Date_Of_Ownership } = req.body;

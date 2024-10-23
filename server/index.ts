@@ -33,6 +33,30 @@ app.get("/api/get/investment", async(req:Request, res: Response,next:NextFunctio
     }
 })
 
+app.get("/api/get/investment/Company/filter:filtername", async(req:Request, res: Response,next:NextFunction)=>{
+    try{
+        const filtername= req.params.filtername;
+        const allInvestments=await Investment.find({Company:{$regex: filtername}});
+        res.status(200).json(allInvestments);
+    }
+    catch(error){
+        console.error(error);
+        next(res.status(500).json({error:"Investments not found"}));
+    }
+})
+
+app.get("/api/get/investment/Domicile/filter:filtername", async(req:Request, res: Response,next:NextFunction)=>{
+    try{
+        const filtername= req.params.filtername;
+        const allInvestments=await Investment.find({Domicile:{$regex: filtername}});
+        res.status(200).json(allInvestments);
+    }
+    catch(error){
+        console.error(error);
+        next(res.status(500).json({error:"Investments not found"}));
+    }
+})
+
 //post operations
 app.post("/api/post/investment", async(req:Request, res: Response, next:NextFunction)=>{
     const{
