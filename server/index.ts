@@ -73,8 +73,7 @@ app.delete("/api/delete/investment/:id", async(req:Request, res: Response,next:N
     try {
         const id= req.params.id;
         await Investment.deleteOne({_id:id})
-        // res.status(200).json({status: "Investment deleted"})
-        res.status(200).json({status: `this is your id ${id}`})
+        res.status(200).json({status: "Investment deleted"})
     } catch (error) {
         console.error(error);
     }
