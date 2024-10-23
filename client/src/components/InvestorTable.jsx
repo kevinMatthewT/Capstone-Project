@@ -1,6 +1,8 @@
 import { useEffect, useState } from 'react'
 import axios from 'axios';
 
+import './styles/InvestorTable.css';
+
 function InvestorTable() {
   const [investments, setInvestment] = useState([]);
   useEffect(()=>{
@@ -8,36 +10,31 @@ function InvestorTable() {
     .then(investments=>setInvestment(investments.data))
     .catch(err=>console.log(err));
     })
-    // Company
-    // Domicile
-    // Year_Of_Operation
-    // Business
-    // Percentage_Ownership
-    // Price_Asset
-    // Date_Of_Ownership
 
     const deleteData=async(_id)=>{
-      // console.log(id);
       axios.delete(`http://localhost:8080/api/delete/investment/`+_id)
       .then(res=>console.log(res.data))
       .catch(err=>console.log(err));
-      // console.log(value);
       
     }
 
   return (
     <>
-      <div>
-        <table>
+      <div className='header-container'>
+        Filter
+      </div>
+      <div className='table-container'>
+        <table className='table-investments'>
             <thead>
                 <tr>
                     <th>Company</th>
                     <th>Domicile</th>
-                    <th>Year_Of_Operation</th>
+                    <th>Year of operation</th>
                     <th>Business</th>
                     <th>Percentage_Ownership</th>
                     <th>Price_Asset</th>
                     <th>Date_Of_Ownership</th>
+                    <th></th>
                 </tr>
             </thead>
             <tbody>
