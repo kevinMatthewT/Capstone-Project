@@ -23,43 +23,43 @@ const port = process.env.PORT;
 app.use((0, cors_1.default)());
 app.use(express_1.default.json());
 const ConnectionString = process.env.CONNECTION_DETAILS;
-mongoose_1.default.connect("mongodb://localhost:27017/techasia")
+mongoose_1.default.connect("mongodb://localhost:27017/techasia", {})
     .then(() => (console.log("connected")))
     .catch((err) => (console.log(err)));
 //get operations
 app.get('/', (req, res) => {
     res.send("hello from the backend");
 });
-app.get("/api/get/investments", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+app.get("/api/get/investments", (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const allInvestments = yield InvestorSchema_1.default.find({});
         res.status(200).json(allInvestments);
     }
     catch (error) {
         console.error(error);
-        res.status(500).json({ error: "Investments not found" });
+        next(res.status(500).json({ error: "Investments not found" }));
     }
 }));
 //post operations
-app.post("/api/post/investment", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+app.post("/api/post/investment", (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+    const { Company, Domicile, Year_Of_Operation, Business, Percentage_Ownership, Price_Asset, Date_Of_Ownership } = req.body;
+    const newInvestment = new InvestorSchema_1.default({
+        Company,
+        Domicile,
+        Year_Of_Operation,
+        Business,
+        Percentage_Ownership,
+        Price_Asset,
+        Date_Of_Ownership
+    });
     try {
-        const { Company, Domicile, Year_Of_Operation, Busienss, Percentage_Ownership, Price_Asset, Date_Of_Ownership } = req.body;
-        const newInvestment = new InvestorSchema_1.default({
-            Company,
-            Domicile,
-            Year_Of_Operation,
-            Busienss,
-            Percentage_Ownership,
-            Price_Asset,
-            Date_Of_Ownership
-        });
-        res.send(newInvestment);
+        // res.send(newInvestment);
         yield newInvestment.save();
         res.status(200).json({ status: "Investment saved" });
     }
     catch (error) {
         console.error(error);
-        res.status(500).json({ error: "Investments not saved" });
+        next(res.status(500).json({ error: "Investments not saved" }));
     }
 }));
 app.listen(port, () => (console.log(`server is running at port ${port}`)));

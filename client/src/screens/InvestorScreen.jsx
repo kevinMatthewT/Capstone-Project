@@ -11,7 +11,7 @@ function InvestorScreen() {
     // Company
     // Domicile
     // Year_Of_Operation
-    // Busienss
+    // Business
     // Percentage_Ownership
     // Price_Asset
     // Date_Of_Ownership
@@ -25,7 +25,7 @@ function InvestorScreen() {
                     <th>Company</th>
                     <th>Domicile</th>
                     <th>Year_Of_Operation</th>
-                    <th>Busienss</th>
+                    <th>Business</th>
                     <th>Percentage_Ownership</th>
                     <th>Price_Asset</th>
                     <th>Date_Of_Ownership</th>
@@ -38,7 +38,7 @@ function InvestorScreen() {
                         <th>{investment.Company}</th>
                         <th>{investment.Domicile}</th>
                         <th>{investment.Year_Of_Operation}</th>
-                        <th>{investment.Busienss}</th>
+                        <th>{investment.Business}</th>
                         <th>{investment.Percentage_Ownership}</th>
                         <th>{investment.Price_Asset}</th>
                         <th>{investment.Date_Of_Ownership}</th>

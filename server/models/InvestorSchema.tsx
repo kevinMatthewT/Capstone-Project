@@ -4,7 +4,7 @@ type InvestmentType = Document & {
 Company: string,
   Domicile: string,
   Year_Of_Operation:number,
-  Busienss: string,
+  Business: string,
   Percentage_Ownership:number,
   Price_Asset:number,
   Date_Of_Ownership:Date
@@ -14,7 +14,7 @@ const investmentSchema : Schema<InvestmentType>= new Schema({
   Company: String,
   Domicile: String,
   Year_Of_Operation:Number,
-  Busienss: String,
+  Business: String,
   Percentage_Ownership:Number,
   Price_Asset:Number,
   Date_Of_Ownership:Date

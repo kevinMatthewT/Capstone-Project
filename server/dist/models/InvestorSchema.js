@@ -28,7 +28,7 @@ const investmentSchema = new mongoose_1.Schema({
     Company: String,
     Domicile: String,
     Year_Of_Operation: Number,
-    Busienss: String,
+    Business: String,
     Percentage_Ownership: Number,
     Price_Asset: Number,
     Date_Of_Ownership: Date

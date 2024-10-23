@@ -13,7 +13,7 @@ const investmentSchema = new mongoose.Schema({
     type: Number,
     required: true,
   },
-  Busienss_Type: {
+  Business: {
     type: String,
     required: true,
   },
