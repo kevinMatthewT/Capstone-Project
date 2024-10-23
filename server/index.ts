@@ -22,7 +22,7 @@ app.get('/', (req : Request, res: Response)=>{
     res.send("hello from the backend")
 })
 
-app.get("/api/get/investments", async(req:Request, res: Response,next:NextFunction)=>{
+app.get("/api/get/investment", async(req:Request, res: Response,next:NextFunction)=>{
     try{
         const allInvestments=await Investment.find({});
         res.status(200).json(allInvestments);
@@ -65,6 +65,18 @@ app.post("/api/post/investment", async(req:Request, res: Response, next:NextFunc
     catch(error){
         console.error(error);
         next(res.status(500).json({error:"Investments not saved"}));
+    }
+})
+
+//delete 
+app.delete("/api/delete/investment/:id", async(req:Request, res: Response,next:NextFunction)=>{
+    try {
+        const id= req.params.id;
+        await Investment.deleteOne({_id:id})
+        // res.status(200).json({status: "Investment deleted"})
+        res.status(200).json({status: `this is your id ${id}`})
+    } catch (error) {
+        console.error(error);
     }
 })
 

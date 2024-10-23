@@ -1,6 +1,9 @@
 const mongoose = require('mongoose');
 
 const investmentSchema = new mongoose.Schema({
+  _id:{
+    type:String,
+  },
   Company: {
     type: String,
     required: true,

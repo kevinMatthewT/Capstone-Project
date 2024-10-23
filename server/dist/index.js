@@ -30,7 +30,7 @@ mongoose_1.default.connect("mongodb://localhost:27017/techasia", {})
 app.get('/', (req, res) => {
     res.send("hello from the backend");
 });
-app.get("/api/get/investments", (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+app.get("/api/get/investment", (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const allInvestments = yield InvestorSchema_1.default.find({});
         res.status(200).json(allInvestments);
@@ -60,6 +60,18 @@ app.post("/api/post/investment", (req, res, next) => __awaiter(void 0, void 0, v
     catch (error) {
         console.error(error);
         next(res.status(500).json({ error: "Investments not saved" }));
+    }
+}));
+//delete 
+app.delete("/api/delete/investment/:id", (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const id = req.params.id;
+        yield InvestorSchema_1.default.deleteOne({ _id: id });
+        // res.status(200).json({status: "Investment deleted"})
+        res.status(200).json({ status: `this is your id ${id}` });
+    }
+    catch (error) {
+        console.error(error);
     }
 }));
 app.listen(port, () => (console.log(`server is running at port ${port}`)));

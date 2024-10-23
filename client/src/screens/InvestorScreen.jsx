@@ -4,7 +4,7 @@ import axios from 'axios';
 function InvestorScreen() {
   const [investments, setInvestment] = useState([]);
   useEffect(()=>{
-    axios.get("http://localhost:8080/api/get/investments")
+    axios.get("http://localhost:8080/api/get/investment")
     .then(investments=>setInvestment(investments.data))
     .catch(err=>console.log(err));
     })
@@ -15,6 +15,15 @@ function InvestorScreen() {
     // Percentage_Ownership
     // Price_Asset
     // Date_Of_Ownership
+
+    const deleteData=async(_id)=>{
+      // console.log(id);
+      axios.delete(`http://localhost:8080/api/delete/investment/`+_id)
+      .then(res=>console.log(res.data))
+      .catch(err=>console.log(err));
+      // console.log(value);
+      
+    }
 
   return (
     <>
@@ -33,16 +42,20 @@ function InvestorScreen() {
             </thead>
             <tbody>
                 {investments.map(investment=>{
+                  // const id_information=
                     return(
-                    <tr>
-                        <th>{investment.Company}</th>
-                        <th>{investment.Domicile}</th>
-                        <th>{investment.Year_Of_Operation}</th>
-                        <th>{investment.Business}</th>
-                        <th>{investment.Percentage_Ownership}</th>
-                        <th>{investment.Price_Asset}</th>
-                        <th>{investment.Date_Of_Ownership}</th>
-                    </tr>)
+                    <>
+                     <tr>
+                        <td>{investment.Company}</td>
+                        <td>{investment.Domicile}</td>
+                        <td>{investment.Year_Of_Operation}</td>
+                        <td>{investment.Business}</td>
+                        <td>{investment.Percentage_Ownership}</td>
+                        <td>{investment.Price_Asset}</td>
+                        <td>{investment.Date_Of_Ownership}</td>
+                        <td><button type='button' onClick={()=>deleteData(investment._id)}>Delete</button></td>
+                     </tr>
+                    </>)
                 })
                 }
             </tbody>

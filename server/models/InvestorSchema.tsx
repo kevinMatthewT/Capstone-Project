@@ -1,7 +1,8 @@
-import mongoose,{Schema, Document, Model} from "mongoose";
+import mongoose,{Schema, Document, Model, ObjectId} from "mongoose";
 
 type InvestmentType = Document & {
-Company: string,
+  _id:ObjectId,
+  Company: string,
   Domicile: string,
   Year_Of_Operation:number,
   Business: string,
