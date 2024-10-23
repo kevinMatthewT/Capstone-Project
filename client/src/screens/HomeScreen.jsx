@@ -1,10 +1,22 @@
 import { useEffect, useState } from 'react'
 
+//importing components
+import Sidebar from '../components/Sidebar'
+import InvestorTable from '../components/InvestorTable'
+
+import "./styles/HomeScreen.css"
+import Topbar from '../components/Topbar'
+
 function HomeScreen() {
   
   return (
     <>
-      hello boss
+    <Sidebar/>
+    <Topbar/>
+    <div className='data-container'>
+      dashboard
+    </div>
+    
     </>
   )
 }
