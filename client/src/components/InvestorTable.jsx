@@ -13,12 +13,12 @@ function InvestorTable() {
     axios.get("http://localhost:8080/api/get/investment")
     .then(investments=>setInvestment(investments.data))
     .catch(err=>console.log(err));
-}else{
+  }else{
     axios.get(`http://localhost:8080/api/get/investment/${Filter}/filter${FilterValue}`)
     .then(investments=>setInvestment(investments.data))
     .catch(err=>console.log(err));
     }
-})
+  })
 
     const deleteData=async(_id)=>{
       axios.delete(`http://localhost:8080/api/delete/investment/`+_id)
@@ -43,7 +43,7 @@ function InvestorTable() {
         <option value={Filter} onClick={()=>setFilter('')}>No Filter</option>
           <option value={Filter} onClick={()=>setFilter('Company')}>company</option>
           <option value={Filter} onClick={()=>setFilter('Domicile')}>Domicile</option>
-          <option value={Filter} onClick={()=>setFilter('Year_Of_Operaton')}>Year_Of_Operation</option>
+          <option value={Filter} onClick={()=>setFilter('Year_Of_Operation')}>Year_Of_Operation</option>
           <option value={Filter} onClick={()=>setFilter('Business')}>Busienss</option>
           <option value={Filter} onClick={()=>setFilter('Percentage_Ownership')}>Percentage_Ownership</option>
           <option value={Filter} onClick={()=>setFilter('Price_Asset')}>Price_Asset</option>
