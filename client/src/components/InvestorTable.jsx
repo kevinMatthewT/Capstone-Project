@@ -7,6 +7,7 @@ function InvestorTable() {
   const [investments, setInvestment] = useState([]);
   const [Filter, setFilter]= useState('');
   const [FilterValue, setFilterValue]= useState('');
+  const [inputType, setInputType]=useState('text');
 
   useEffect(()=>{
     if(Filter==''){
@@ -34,12 +35,21 @@ function InvestorTable() {
     .catch(err=>console.log(err));
   }
 
+  const toggleInput = ()=>{
+    if(Filter=='Company'||Filter=='Domicile'||Filter=='Business'){
+      setInputType('text')
+    }else if(Filter=='Year_Of_Operation'||Filter=='Percentage_Ownership'||Filter=='Price_Asset'){
+      setInputType('number')
+    }
+    
+  }
+
   return (
     <>
       <div className='header-container'>
         Set Filters
         <form onSubmit={handleSubmit}>        
-        <select id="cars" name="cars" size="3">
+        <select size="3">
         <option value={Filter} onClick={()=>setFilter('')}>No Filter</option>
           <option value={Filter} onClick={()=>setFilter('Company')}>company</option>
           <option value={Filter} onClick={()=>setFilter('Domicile')}>Domicile</option>
@@ -49,9 +59,9 @@ function InvestorTable() {
           <option value={Filter} onClick={()=>setFilter('Price_Asset')}>Price_Asset</option>
           <option value={Filter} onClick={()=>setFilter('Date_Of_Ownership')}>Date_Of_Ownership</option>
         </select>
-        <input type='text' value={FilterValue} onChange={(e)=>setFilterValue(e.target.value)}/>
-        <button onClick={handleSubmit}>go filter</button>
+        <input type={inputType} value={FilterValue} onChange={(e)=>setFilterValue(e.target.value)}/>
         </form>
+        <button onClick={toggleInput}>go filter</button>
       </div>
       <div className='table-container'>
         <table className='table-investments'>

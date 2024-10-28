@@ -57,17 +57,18 @@ app.get("/api/get/investment/Domicile/filter:filtername", async(req:Request, res
     }
 })
 
-// app.get("/api/get/investment/Year_Of_Operation/filter:filtername", async(req:Request, res: Response,next:NextFunction)=>{
-//     try{
-//         const filtername= req.params.filtername;
-//         const allInvestments=await Investment.find({Year_Of_Operation:{$regex: filtername}});
-//         res.status(200).json(allInvestments);
-//     }
-//     catch(error){
-//         console.error(error);
-//         next(res.status(500).json({error:"Investments not found"}));
-//     }
-// })
+app.get("/api/get/investment/Year_Of_Operation/filter:filtername", async(req:Request, res: Response,next:NextFunction)=>{
+    try{
+        const filtername= req.params.filtername;
+        const numFilter=Number(filtername)
+        const allInvestments=await Investment.find({Year_Of_Operation:{$gte:numFilter}});
+        res.status(200).json(allInvestments);
+    }
+    catch(error){
+        console.error(error);
+        next(res.status(500).json({error:"Investments not found"}));
+    }
+})
 
 app.get("/api/get/investment/Business/filter:filtername", async(req:Request, res: Response,next:NextFunction)=>{
     try{
@@ -81,15 +82,11 @@ app.get("/api/get/investment/Business/filter:filtername", async(req:Request, res
     }
 })
 
-app.get("/api/get/investment/All/:fn1/:fn2/:fn3/:fn4/:fn5/:fn6", async(req:Request, res: Response,next:NextFunction)=>{
+app.get("/api/get/investment/Percentage_Ownership/filter:filtername", async(req:Request, res: Response,next:NextFunction)=>{
     try{
-        const filtername1= req.params.fn1;
-        const filtername2= req.params.fn2;
-        const filtername3= req.params.fn3;
-        const filtername4= req.params.fn4;
-        const filtername5= req.params.fn5;
-        const filtername6= req.params.fn6;
-        const allInvestments=await Investment.find({Business:{$regex: filtername2}});
+        const filtername= req.params.filtername;
+        const numFilter=Number(filtername)
+        const allInvestments=await Investment.find({Percentage_Ownership:{$gte:numFilter}});
         res.status(200).json(allInvestments);
     }
     catch(error){
@@ -97,6 +94,36 @@ app.get("/api/get/investment/All/:fn1/:fn2/:fn3/:fn4/:fn5/:fn6", async(req:Reque
         next(res.status(500).json({error:"Investments not found"}));
     }
 })
+
+app.get("/api/get/investment/Price_Asset/filter:filtername", async(req:Request, res: Response,next:NextFunction)=>{
+    try{
+        const filtername= req.params.filtername;
+        const numFilter=Number(filtername)
+        const allInvestments=await Investment.find({Price_Asset:{$gte:numFilter}});
+        res.status(200).json(allInvestments);
+    }
+    catch(error){
+        console.error(error);
+        next(res.status(500).json({error:"Investments not found"}));
+    }
+})
+
+// app.get("/api/get/investment/All/:fn1/:fn2/:fn3/:fn4/:fn5/:fn6", async(req:Request, res: Response,next:NextFunction)=>{
+//     try{
+//         const filtername1= req.params.fn1;
+//         const filtername2= req.params.fn2;
+//         const filtername3= req.params.fn3;
+//         const filtername4= req.params.fn4;
+//         const filtername5= req.params.fn5;
+//         const filtername6= req.params.fn6;
+//         const allInvestments=await Investment.find({Business:{$regex: filtername2}});
+//         res.status(200).json(allInvestments);
+//     }
+//     catch(error){
+//         console.error(error);
+//         next(res.status(500).json({error:"Investments not found"}));
+//     }
+// })
 
 
 
