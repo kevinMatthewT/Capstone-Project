@@ -37,9 +37,11 @@ function InvestorTable() {
 
   const toggleInput = ()=>{
     if(Filter=='Company'||Filter=='Domicile'||Filter=='Business'){
-      setInputType('text')
+      setInputType('text');
     }else if(Filter=='Year_Of_Operation'||Filter=='Percentage_Ownership'||Filter=='Price_Asset'){
-      setInputType('number')
+      setInputType('number');
+    }else if(Filter=='Date_Of_Ownership'){
+      setInputType('date');
     }
     
   }

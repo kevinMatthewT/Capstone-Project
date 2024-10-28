@@ -109,6 +109,17 @@ app.get("/api/get/investment/Price_Asset/filter:filtername", (req, res, next) =>
         next(res.status(500).json({ error: "Investments not found" }));
     }
 }));
+app.get("/api/get/investment/Date_Of_Ownership/filter:filtername", (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const filtername = req.params.filtername;
+        const allInvestments = yield InvestorSchema_1.default.find({ Date_Of_Ownership: { $gte: filtername } });
+        res.status(200).json(allInvestments);
+    }
+    catch (error) {
+        console.error(error);
+        next(res.status(500).json({ error: "Investments not found" }));
+    }
+}));
 // app.get("/api/get/investment/All/:fn1/:fn2/:fn3/:fn4/:fn5/:fn6", async(req:Request, res: Response,next:NextFunction)=>{
 //     try{
 //         const filtername1= req.params.fn1;
