@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react'
 import axios from 'axios';
+import {format} from 'date-fns';
 
 import './styles/InvestorTable.css';
 
@@ -91,7 +92,7 @@ function InvestorTable() {
                         <td>{investment.Business}</td>
                         <td>{investment.Percentage_Ownership}</td>
                         <td>{investment.Price_Asset}</td>
-                        <td>{investment.Date_Of_Ownership}</td>
+                        <td>{format(investment.Date_Of_Ownership,'dd-MM-yyyy')}</td>
                         <td><button type='button' onClick={()=>deleteData(investment._id)}>Delete</button></td>
                      </tr>
                     </>)
