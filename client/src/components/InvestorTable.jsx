@@ -53,9 +53,8 @@ function InvestorTable(props) {
   return (
     <>
       <div className='header-container'>
-        Set Filters
-        <form onSubmit={handleSubmit}>        
-        <select size="3">
+        <p className='filter-text'>Set Filters</p>      
+        <select size="3" className='filter-box'>
         <option value={Filter} onClick={()=>setFilter('')}>No Filter</option>
           <option value={Filter} onClick={()=>setFilter('Company')}>company</option>
           <option value={Filter} onClick={()=>setFilter('Domicile')}>Domicile</option>
@@ -63,11 +62,10 @@ function InvestorTable(props) {
           <option value={Filter} onClick={()=>setFilter('Business')}>Busienss</option>
           <option value={Filter} onClick={()=>setFilter('Percentage_Ownership')}>Percentage_Ownership</option>
           <option value={Filter} onClick={()=>setFilter('Price_Asset')}>Price_Asset</option>
-          <option value={Filter} onClick={()=>setFilter('Date_Of_Ownership')}>Date_Of_Ownership</option>
+          <option value={Filter} onClick={()=>setFilter('Date_Of_Ownership')} >Date_Of_Ownership</option>
         </select>
-        <input type={inputType} value={FilterValue} onChange={(e)=>setFilterValue(e.target.value)}/>
-        </form>
-        <button onClick={toggleInput}>go filter</button>
+        <input type={inputType} value={FilterValue} onChange={(e)=>setFilterValue(e.target.value)} onClick={toggleInput} className='search-box'/>
+        {/* <button onClick={toggleInput}>go filter</button> */}
       </div>
       <div className='table-container'>
         <table className='table-investments'>
@@ -111,6 +109,7 @@ function InvestorTable(props) {
                         <td>{investment.Percentage_Ownership}</td>
                         <td>{investment.Price_Asset}</td>
                         <td>{format(investment.Date_Of_Ownership,'dd-MM-yyyy')}</td>
+                        <td><button type='button' onClick={()=>navigate(`/investments/update/${investment._id}`)}>Edit</button></td>
                         <td><button type='button' onClick={()=>deleteData(investment._id)}>Delete</button></td>
                      </tr>)
                   }
