@@ -1,0 +1,21 @@
+.form-container{
+    border: solid;
+    width: 84%;
+    position: absolute;
+    margin-left: 15.2%;
+    margin-top: 5%;
+    height: 87vh;
+}
+
+.form-box{
+    position: relative;
+    width: 40%;
+    left: 30%;
+    top: 40px;
+}
+
+.form-field-name{
+    font-size: 20px;
+    padding-top: 10px;
+    padding-bottom: 10px;
+}

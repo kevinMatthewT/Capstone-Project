@@ -8,13 +8,12 @@ function Sidebar() {
     return (
       <>
         <div className='sidebar-container'>
-          <h1 className='Logo'>
-            TECH ASIA
-          </h1>
-
-          <h2 onClick={()=>navigate("/")}>home</h2>
-          <h2 onClick={()=>navigate("/investments")}>investment</h2>
-          <h2 onClick={()=>navigate("/investments/form")}>add investment</h2>
+          
+          <div className='pages-list'>
+            <h2 onClick={()=>navigate("/")}>Dashboard</h2>
+            <h2 onClick={()=>navigate("/investments")}>Investments</h2>
+            <h2 onClick={()=>navigate("/investments/form")}>Add New</h2>
+          </div>
         </div>
       </>
     )
