@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react'
 import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
 
 function InvestorForm() {
 //   const [investments, setInvestment] = useState('');
@@ -15,6 +16,8 @@ function InvestorForm() {
     //     Price_Asset:''
     //     Date_Of_Ownership
     // });
+    const navigate=useNavigate();
+
     const [Company, setCompany]= useState('');
     const [Domicile, setDomicile]= useState('');
     const [Year_Of_Operation,setYear_Of_Operation]= useState('');
@@ -33,7 +36,7 @@ function InvestorForm() {
             Price_Asset,
             Date_Of_Ownership
         })
-    .then(response=>console.log(response))
+    .then(navigate('/investments'))
     .catch(err=>console.log(err));
     }
 

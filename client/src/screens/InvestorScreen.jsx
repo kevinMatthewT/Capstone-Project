@@ -14,7 +14,7 @@ function InvestorScreen() {
     <Sidebar/>
     <Topbar/>
     <div className='data-container'>
-      <InvestorTable/>
+      <InvestorTable name="editor"/>
     </div>
     
     </>

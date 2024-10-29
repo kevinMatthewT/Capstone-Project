@@ -1,14 +1,17 @@
 import { useEffect, useState } from 'react'
 import axios from 'axios';
 import {format} from 'date-fns';
+import { useNavigate } from 'react-router-dom'
 
 import './styles/InvestorTable.css';
 
-function InvestorTable() {
+function InvestorTable(props) {
   const [investments, setInvestment] = useState([]);
   const [Filter, setFilter]= useState('');
   const [FilterValue, setFilterValue]= useState('');
   const [inputType, setInputType]=useState('text');
+
+  const navigate=useNavigate();
 
   useEffect(()=>{
     if(Filter==''){
@@ -82,6 +85,7 @@ function InvestorTable() {
             </thead>
             <tbody>
                 {investments.map(investment=>{
+                  if(props.name=="editor"){
                   if(Filter==''){
                     return(
                     <>
@@ -93,6 +97,7 @@ function InvestorTable() {
                         <td>{investment.Percentage_Ownership}</td>
                         <td>{investment.Price_Asset}</td>
                         <td>{format(investment.Date_Of_Ownership,'dd-MM-yyyy')}</td>
+                        <td><button type='button' onClick={()=>navigate(`/investments/update/${investment._id}`)}>Edit</button></td>
                         <td><button type='button' onClick={()=>deleteData(investment._id)}>Delete</button></td>
                      </tr>
                     </>)
@@ -108,9 +113,22 @@ function InvestorTable() {
                         <td>{format(investment.Date_Of_Ownership,'dd-MM-yyyy')}</td>
                         <td><button type='button' onClick={()=>deleteData(investment._id)}>Delete</button></td>
                      </tr>)
-                    
                   }
-                })
+                }else {
+                  return(
+                    <>
+                     <tr>
+                        <td>{investment.Company}</td>
+                        <td>{investment.Domicile}</td>
+                        <td>{investment.Year_Of_Operation}</td>
+                        <td>{investment.Business}</td>
+                        <td>{investment.Percentage_Ownership}</td>
+                        <td>{investment.Price_Asset}</td>
+                        <td>{format(investment.Date_Of_Ownership,'dd-MM-yyyy')}</td>
+                     </tr>
+                    </>)
+                }
+              })
                 }
             </tbody>
         </table>

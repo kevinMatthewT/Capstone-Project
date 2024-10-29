@@ -6,6 +6,7 @@ import {BrowserRouter,Routes,Route} from "react-router-dom";
 import InvestorScreen from './screens/InvestorScreen';
 import HomeScreen from './screens/HomeScreen';
 import InvestorForm from './screens/InvestorForm';
+import UpdateInvestor from './screens/UpdateInvestor';
 
 function App() {
   return (
@@ -15,6 +16,7 @@ function App() {
         <Route path='/' element={<HomeScreen/>}/>
         <Route path='/investments' element={<InvestorScreen/>}/>
         <Route path='/investments/form' element={<InvestorForm/>}/>
+        <Route path='/investments/update/:id' element={<UpdateInvestor/>}/>
       </Routes>
     </BrowserRouter>
     </>

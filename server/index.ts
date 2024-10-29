@@ -120,6 +120,17 @@ app.get("/api/get/investment/Date_Of_Ownership/filter:filtername", async(req:Req
     }
 })
 
+app.get("/api/get/investment/:id", async(req:Request, res: Response,next:NextFunction)=>{
+    try{
+        const uid= req.params.id;
+        const allInvestments=await Investment.findOne({_id:uid});
+        res.status(200).json(allInvestments);
+    }
+    catch(error){
+        console.error(error);
+        next(res.status(500).json({error:"Investments not found"}));
+    }
+})
 // app.get("/api/get/investment/All/:fn1/:fn2/:fn3/:fn4/:fn5/:fn6", async(req:Request, res: Response,next:NextFunction)=>{
 //     try{
 //         const filtername1= req.params.fn1;
@@ -185,5 +196,41 @@ app.delete("/api/delete/investment/:id", async(req:Request, res: Response,next:N
         console.error(error);
     }
 })
+
+//post
+app.put("/api/update/investment/:id", async(req:Request, res: Response,next:NextFunction)=>{
+    const{
+        Company,
+        Domicile,
+        Year_Of_Operation,
+        Business,
+        Percentage_Ownership,
+        Price_Asset,
+        Date_Of_Ownership
+    } = req.body
+
+    const uid=req.params.id;
+
+    try{
+
+        await Investment.updateOne({_id:uid},{
+            $set:{
+                Company:Company,
+                Domicile:Domicile,
+                Year_Of_Operation:Year_Of_Operation,
+                Business:Business,
+                Percentage_Ownership:Percentage_Ownership,
+                Price_Asset:Price_Asset,
+                Date_Of_Ownership:Date_Of_Ownership
+            }
+        })
+        res.status(200).json({status: "Investment saved"})
+    }
+    catch(error){
+        console.error(error);
+        next(res.status(500).json({error:"Investments not saved"}));
+    }
+})
+
 
 app.listen(port,()=>(console.log(`server is running at port ${port}`)))
