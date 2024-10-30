@@ -1,5 +1,5 @@
 import express, {Express, NextFunction, Request, Response } from 'express';
-import dotenv from 'dotenv'
+import dotenv from 'dotenv';
 import mongoose from 'mongoose';
 import Investment from './models/InvestorSchema';
 import cors from 'cors';

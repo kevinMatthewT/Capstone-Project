@@ -10,4 +10,11 @@
     margin-left:3%;
     top: -15px;
     position: relative;
+    font-size: 40px;
+}
+
+.logout-button{
+    position:fixed;
+    margin-left: 1000px;
+    top: -5px;
 }

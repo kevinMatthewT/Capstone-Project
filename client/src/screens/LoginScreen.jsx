@@ -44,7 +44,7 @@ const LoginScreen = () => {
 
     if (user) {
       console.log(user.displayName);
-      navigate("/");
+      navigate("/dashboard");
     }
     if (error) alert(error);
   }, [error, loading, navigate, user]);

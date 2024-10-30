@@ -1,6 +1,8 @@
 import { useEffect, useState } from 'react'
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
+import { useAuthState } from "react-firebase-hooks/auth";
+import { auth } from "../Firebase";
 
 //components
 import Sidebar from '../components/Sidebar'
@@ -32,6 +34,17 @@ function InvestorForm() {
     const [Price_Asset,setPrice_Asset]= useState('');
     const [Date_Of_Ownership, setDate_Of_Ownership]= useState('');
 
+    const [user, loading, error] = useAuthState(auth);
+
+    const loginChecker= async()=>{
+      alert("you do not have access for this page")
+      try {
+        navigate('/');
+      }catch(err){
+  
+      }
+    }
+
     const handleSubmit =async (e)=>{
         await axios.post("http://localhost:8080/api/post/investment",{
             Company,
@@ -46,6 +59,7 @@ function InvestorForm() {
     .catch(err=>console.log(err));
     }
 
+    if(user){
   return (
     <>
     <Sidebar/>
@@ -88,7 +102,9 @@ function InvestorForm() {
     </div>
       
     </>
-  )
+  )}else{
+    loginChecker();
+  }
 }
 
 export default InvestorForm
