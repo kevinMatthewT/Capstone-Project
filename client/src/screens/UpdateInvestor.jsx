@@ -1,6 +1,9 @@
 import { useEffect, useState } from 'react'
 import axios from 'axios';
 import {useParams ,useNavigate} from 'react-router-dom'
+import './styles/UpdateInvestor.css'
+import { useAuthState } from "react-firebase-hooks/auth";
+import { auth } from "../Firebase";
 
 function UpdateInvestor() {
     const {id}= useParams();
@@ -31,6 +34,23 @@ function UpdateInvestor() {
     },[]
     )
 
+    const [user, loading, error] = useAuthState(auth);
+
+    useEffect(() => {
+        if (!loading && !user) {
+            loginChecker();
+        }
+    }, [user, loading]);
+
+    const loginChecker= async()=>{
+        alert("you do not have access for this page")
+        try {
+        navigate('/');
+        }catch(err){
+
+        }
+    }
+
 
     // console.log(investments)
 
@@ -52,20 +72,44 @@ function UpdateInvestor() {
     
     }
 
+    if(user){
   return (
     <>
-    <form onSubmit={handleSubmit}>
-        <input type='text' defaultValue={Company} onChange={(e)=>setCompany(e.target.value)} placeholder={investments.Company}/>
-        <input type='text' defaultValue={Domicile} onChange={(e)=>setDomicile(e.target.value)} placeholder={investments.Domicile}/>
-        <input type='number' defaultValue={Year_Of_Operation} onChange={(e)=>setYear_Of_Operation(e.target.value)} placeholder={investments.Year_Of_Operation}/>
-        <input type='text' defaultValue={Business} onChange={(e)=>setBusiness(e.target.value)} placeholder={investments.Business}/>
-        <input type='number' defaultValue={Percentage_Ownership} onChange={(e)=>setPercentage_Ownership(e.target.value)} placeholder={investments.Percentage_Ownership}/>
-        <input type='number' defaultValue={Price_Asset} onChange={(e)=>setPrice_Asset(e.target.value)} placeholder={investments.Price_Asset}/>
-        <input type='date' defaultValue={Date_Of_Ownership} onChange={(e)=>setDate_Of_Ownership(e.target.value)} placeholder={investments.Date_Of_Ownership}/>
-        <button type='submit'>update form</button>
-    </form>
+    <form onSubmit={handleSubmit} className='form-box'>
+          <table>
+            <tr>
+              <td className='form-field-name'>Company:</td>
+              <td><input type='text' defaultValue={Company} onChange={(e)=>setCompany(e.target.value)} placeholder={investments.Company}/></td>
+            </tr>
+            <tr>
+              <td className='form-field-name'>Domicile:</td>
+              <td><input type='text' defaultValue={Domicile} onChange={(e)=>setDomicile(e.target.value)} placeholder={investments.Domicile}/></td>
+            </tr>
+            <tr>
+              <td className='form-field-name'>Year of operation:</td>
+              <td><input type='number' defaultValue={Year_Of_Operation} onChange={(e)=>setYear_Of_Operation(e.target.value)} placeholder={investments.Year_Of_Operation}/></td>
+            </tr>
+            <tr>
+              <td className='form-field-name'>Business type:</td>
+              <td><input type='text' defaultValue={Business} onChange={(e)=>setBusiness(e.target.value)} placeholder={investments.Business}/></td>
+            </tr>
+            <tr>
+              <td className='form-field-name'>Percentage of Ownership:</td>
+              <td><input type='number' defaultValue={Percentage_Ownership} onChange={(e)=>setPercentage_Ownership(e.target.value)} placeholder={investments.Percentage_Ownership}/></td>
+            </tr>
+            <tr>
+              <td className='form-field-name'>Price of asset:</td>
+              <td><input type='number' defaultValue={Price_Asset} onChange={(e)=>setPrice_Asset(e.target.value)} placeholder={investments.Price_Asset}/></td>
+            </tr>
+            <tr>
+              <td className='form-field-name'>Date of Ownership:</td>
+              <td><input type='date' defaultValue={Date_Of_Ownership} onChange={(e)=>setDate_Of_Ownership(e.target.value)} placeholder={investments.Date_Of_Ownership}/></td>
+            </tr>
+          </table> 
+          <button type='submit'>update form</button>
+        </form>
     </>
-  )
+  )}
 }
 
 export default UpdateInvestor
