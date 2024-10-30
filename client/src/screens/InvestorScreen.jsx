@@ -14,6 +14,12 @@ function InvestorScreen() {
   const navigate=useNavigate();
   const [user, loading, error] = useAuthState(auth);
 
+  useEffect(() => {
+    if (!loading && !user) {
+        loginChecker();
+    }
+  }, [user, loading]);
+
   const loginChecker= async()=>{
     alert("you do not have access for this page")
     try {
@@ -33,9 +39,7 @@ function InvestorScreen() {
     </div>
     
     </>
-  )}else{
-    loginChecker();
-  }
+  )}
 }
 
 export default InvestorScreen

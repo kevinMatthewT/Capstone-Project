@@ -14,6 +14,13 @@ import Topbar from '../components/Topbar'
 function HomeScreen() {
 
   const [user, loading, error] = useAuthState(auth);
+
+  useEffect(() => {
+    if (!loading && !user) {
+        loginChecker();
+    }
+  }, [user, loading]);
+  
   const navigate = useNavigate("");
 
   const loginChecker= async()=>{
@@ -36,9 +43,6 @@ function HomeScreen() {
     
     </>
   )}
-  else{
-    loginChecker();
-  }
 }
 
 export default HomeScreen
