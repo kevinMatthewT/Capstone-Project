@@ -7,6 +7,8 @@ import InvestorScreen from './screens/InvestorScreen';
 import HomeScreen from './screens/HomeScreen';
 import InvestorForm from './screens/InvestorForm';
 import UpdateInvestor from './screens/UpdateInvestor';
+import LoginScreen from './screens/LoginScreen';
+import ResetPassScreen from "./screens/ResetPassScreen";
 
 function App() {
   return (
@@ -14,28 +16,14 @@ function App() {
     <BrowserRouter>
       <Routes>
         <Route path='/' element={<HomeScreen/>}/>
+        <Route path='/login' element={<LoginScreen/>}/>
+        <Route path='/resetpass' element={<ResetPassScreen/>}/>
         <Route path='/investments' element={<InvestorScreen/>}/>
         <Route path='/investments/form' element={<InvestorForm/>}/>
         <Route path='/investments/update/:id' element={<UpdateInvestor/>}/>
       </Routes>
     </BrowserRouter>
     </>
-    // <div className="App">
-    //   <header className="App-header">
-    //     <img src={logo} className="App-logo" alt="logo" />
-    //     <p>
-    //       Edit <code>src/App.js</code> and save to reload.
-    //     </p>
-    //     <a
-    //       className="App-link"
-    //       href="https://reactjs.org"
-    //       target="_blank"
-    //       rel="noopener noreferrer"
-    //     >
-    //       Learn React
-    //     </a>
-    //   </header>
-    // </div>
   );
 }
 
