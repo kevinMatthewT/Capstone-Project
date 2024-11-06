@@ -76,7 +76,8 @@ function InvestorTable({isSidebarOpen}) {
         { field: 'Price_Asset', headerName: 'Price Asset', flex: 1 },
         { field: 'Date_Of_Ownership', headerName: 'Date of Ownership', flex: 1, 
           valueFormatter: (params) => {
-            return params.value ? format(new Date(params.value), 'dd-MM-yyyy') : ''; 
+            return params.value
+            // return params.value ? format(new Date(params.value), 'dd-MM-yyyy') : ''; 
           }
         },
         {
@@ -103,11 +104,10 @@ function InvestorTable({isSidebarOpen}) {
         Business: investment.Business,
         Percentage_Ownership: investment.Percentage_Ownership,
         Price_Asset: investment.Price_Asset,
-        Date_Of_Ownership: investment.Date_Of_Ownership?.$date 
-        ? format(new Date(investment.Date_Of_Ownership.$date), 'dd-MM-yyyy')
-        : ''
+        Date_Of_Ownership: investment.Date_Of_Ownership
+          ? format(new Date(investment.Date_Of_Ownership), 'dd-MM-yyyy')
+          : ''
     }));
-    
     return (
     <>
     {/* <div className='header-container'>
