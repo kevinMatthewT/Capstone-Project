@@ -7,9 +7,7 @@ import LoginIcon from '@mui/icons-material/Login';
 
 import '../screens/styles/LoginScreen.css';
 
-import CoverImage from "../assets/Cover2.jpg";
 import CoverImage2 from "../assets/coverimage2.jpg";
-import CoverImage3 from "../assets/coverimage3.jpg";
 import CoverImage4 from "../assets/coverimage4.jpg";
 import CoverImage5 from "../assets/coverimage5.jpg";
 import TinyLogo from "../assets/MERKLE-logo.png";
@@ -26,9 +24,6 @@ const LoginScreen = () => {
   const handleClickShowPassword = () => {
     setShowPassword((prev) => !prev);
   };
-  const handleMouseDownPassword = (event) => {
-    event.preventDefault();
-  }
 
   //login
   const [email, setEmail] = useState('');
@@ -60,7 +55,7 @@ const LoginScreen = () => {
                     Come and see our management system
                 </p>
             </div>
-            <img src= {CoverImage5} alt="cover" className='w-full h-full object-cover' />
+            <img src= {CoverImage2} alt="cover" className='w-full h-full object-cover' />
         </div>
 
         <div className="w-1/2 h-full bg-[#edf5fc] flex flex-col p-20 justify-between items-center">

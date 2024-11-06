@@ -5,14 +5,14 @@ import { auth } from "../Firebase";
 import { useNavigate } from "react-router-dom";
 
 //importing components
-import Sidebar from '../components/Sidebar'
+import Sidebar from './global/Sidebar';
 import InvestorTable from '../components/InvestorTable'
+import Topbar from './global/Topbar';
+import HeaderTitle from './global/HeaderTitle';
 
-import "./styles/HomeScreen.css"
-import Topbar from '../components/Topbar'
 
 function HomeScreen() {
-
+  const [isSidebarOpen, setIsSidebarOpen] = useState(true);
   const [user, loading, error] = useAuthState(auth);
 
   useEffect(() => {
@@ -35,14 +35,25 @@ function HomeScreen() {
   if(user){
   return (
     <>
-    <Sidebar/>
-    <Topbar/>
-    <div className='data-container'>
-      dashboard
-    </div>
-    
+    <div className='flex min-h-screen h-auto'>
+      {/* Sidebar */}
+      <Sidebar isSidebarOpen={isSidebarOpen} setIsSidebarOpen={setIsSidebarOpen} />
+        
+        {/* Topbar */}
+        <div className='flex-1 flex flex-col'>
+          <Topbar isSidebarOpen={isSidebarOpen}/>
+            
+            {/* Main Content */}
+            <div className='px-4 pt-2 flex-1 overflow-y-auto'>
+              <HeaderTitle title='Dashboard' isSidebarOpen={isSidebarOpen}/>
+            </div>
+
+        </div>
+    </div> 
     </>
   )}
+
+  return null;
 }
 
 export default HomeScreen

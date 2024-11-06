@@ -1,18 +1,13 @@
-import { useEffect, useState } from 'react'
-import { useAuthState } from "react-firebase-hooks/auth";
-import { auth } from "../Firebase";
-import { useNavigate } from "react-router-dom";
-
-//importing components
+import React, { useEffect, useState } from 'react'
 import Sidebar from './global/Sidebar'
-import InvestorTable from '../components/InvestorTable'
-
 import Topbar from './global/Topbar'
 import HeaderTitle from './global/HeaderTitle';
+import { useNavigate } from 'react-router-dom';
+import { useAuthState } from 'react-firebase-hooks/auth';
+import { auth } from '../Firebase';
 
-function InvestorScreen() {
+function AnalyticScreen() {
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
-  const navigate=useNavigate();
   const [user, loading, error] = useAuthState(auth);
 
   useEffect(() => {
@@ -20,6 +15,8 @@ function InvestorScreen() {
         loginChecker();
     }
   }, [user, loading]);
+  
+  const navigate = useNavigate("");
 
   const loginChecker= async()=>{
     alert("you do not have access for this page")
@@ -30,9 +27,8 @@ function InvestorScreen() {
     }
   }
 
-  if (user){
+  if(user){
   return (
-    <>
     <div className='flex min-h-screen h-auto'>
       {/* Sidebar */}
       <Sidebar isSidebarOpen={isSidebarOpen} setIsSidebarOpen={setIsSidebarOpen} />
@@ -43,15 +39,12 @@ function InvestorScreen() {
             
             {/* Main Content */}
             <div className='px-4 pt-2 flex-1 overflow-y-auto'>
-              <HeaderTitle title='Investor' isSidebarOpen={isSidebarOpen}/>
-              <InvestorTable name="editor"/>
+              <HeaderTitle title='Analytics' isSidebarOpen={isSidebarOpen} />
             </div>
+
         </div>
-    </div> 
-    
-    
-    </>
+    </div>
   )}
 }
 
-export default InvestorScreen
+export default AnalyticScreen
