@@ -42,9 +42,9 @@ function InvestorScreen() {
           <Topbar isSidebarOpen={isSidebarOpen}/>
             
             {/* Main Content */}
-            <div className='px-4 pt-2 flex-1 overflow-y-auto'>
-              <HeaderTitle title='Investor' isSidebarOpen={isSidebarOpen}/>
-              <InvestorTable name="editor"/>
+            <div className='px-8 py-4 flex-1 overflow-y-auto bg-[#eef2f6] rounded-lg'>
+              <HeaderTitle title='Investment' isSidebarOpen={isSidebarOpen}/>
+              <InvestorTable name="editor" isSidebarOpen={isSidebarOpen} />
             </div>
         </div>
     </div> 

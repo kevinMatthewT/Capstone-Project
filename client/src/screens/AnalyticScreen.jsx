@@ -38,7 +38,7 @@ function AnalyticScreen() {
           <Topbar isSidebarOpen={isSidebarOpen}/>
             
             {/* Main Content */}
-            <div className='px-4 pt-2 flex-1 overflow-y-auto'>
+            <div className='px-8 py-4 flex-1 overflow-y-auto bg-[#eef2f6] rounded-lg'>
               <HeaderTitle title='Analytics' isSidebarOpen={isSidebarOpen} />
             </div>
 
