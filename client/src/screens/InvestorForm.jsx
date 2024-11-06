@@ -77,6 +77,11 @@ function InvestorForm() {
   .catch(err=>console.log(err));
     }
     
+    const containerStyle = (isSidebarOpen) => ({
+      width: `calc(100% - ${isSidebarOpen ? '256px' : '80px'})`,
+      marginLeft: isSidebarOpen ? '256px' : '80px',
+      transition: 'width 0.3s ease, margin-left 0.3s ease', // smooth transition
+    });
     
     if(user){
     return (
@@ -93,7 +98,7 @@ function InvestorForm() {
           <div className='px-8 py-4 flex-1 overflow-y-auto bg-[#eef2f6] rounded-lg'>
             <HeaderTitle title='Investor Form' isSidebarOpen={isSidebarOpen}/>
 
-            <div className=''>
+            <div style={{ ...containerStyle(isSidebarOpen), padding: '16px' }}>
               <form onSubmit={handleSubmit} className='form-box'>
                 <table>
                   <tr>

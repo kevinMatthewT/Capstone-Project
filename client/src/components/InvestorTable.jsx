@@ -8,13 +8,17 @@ import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
 import SaveIcon from '@mui/icons-material/Save';
 import IconButton from '@mui/material/IconButton'
+import { Search } from '@mui/icons-material';
 
 // import './styles/InvestorTable.css';
 
 function CustomToolbar() {
   return (
     <GridToolbarContainer>
-      <IconButton color='#009688' >CSV Export</IconButton>
+      <IconButton sx={{ color: '#009688' }} >
+        <SaveIcon /> 
+        CSV Export
+      </IconButton>
     </GridToolbarContainer>
   )
 }
@@ -71,7 +75,7 @@ function InvestorTable({isSidebarOpen}) {
         { field: 'Company', headerName: 'Company', flex: 1 },
         { field: 'Domicile', headerName: 'Domicile', flex: 1 },
         { field: 'Year_Of_Operation', headerName: 'Year of Operation', flex: 1 },
-        { field: 'Business', headerName: 'Business', flex: 1 },
+        { field: 'Business', headerName: 'Business', flex: 1.5 },
         { field: 'Percentage_Ownership', headerName: 'Percentage Ownership', flex: 1 },
         { field: 'Price_Asset', headerName: 'Price Asset', flex: 1 },
         { field: 'Date_Of_Ownership', headerName: 'Date of Ownership', flex: 1, 
@@ -85,10 +89,10 @@ function InvestorTable({isSidebarOpen}) {
             headerName: 'Actions', 
             renderCell: (params) => (
             <div>
-                <IconButton color='#009688' onClick={() => navigate(`/investments/update/${params.id}`)}>
+                <IconButton sx={{ color: '#009688' }} onClick={() => navigate(`/investments/update/${params.id}`)}>
                   <EditIcon />
                 </IconButton>
-                <IconButton color='#d9534f' onClick={() => deleteData(params.id)}>
+                <IconButton sx={{ color: '#d9534f' }} onClick={() => deleteData(params.id)}>
                   <DeleteIcon />
                 </IconButton>
             </div>
@@ -124,9 +128,10 @@ function InvestorTable({isSidebarOpen}) {
         </select>
         <input type={inputType} value={FilterValue} onChange={(e)=>setFilterValue(e.target.value)} onClick={toggleInput} className='search-box'/>
         {/* <button onClick={toggleInput}>go filter</button>
-        </div> */}
-    <div style={{ ...containerStyle(isSidebarOpen), padding: '16px' }}>
-      <div style={{ overflowY: 'auto', overflowX: 'auto', width: '100%', height: '600px', backgroundColor: 'white', borderRadius: '8px', boxShadow: '0px 4px 12px rgba(0, 0, 0, 0.1)' }}>
+        </div> */}  
+
+    <div style={{ ...containerStyle(isSidebarOpen), padding: '16px 0' }}>
+      <div style={{ width: '100%', height: '600px', backgroundColor: 'white', borderRadius: '8px', boxShadow: '0px 4px 12px rgba(0, 0, 0, 0.1)' }}>
         <DataGrid
           rows={rows}
           columns={columns}
@@ -134,15 +139,34 @@ function InvestorTable({isSidebarOpen}) {
           rowsPerPageOptions={[10, 15, 25]}
           disableSelectionOnClick
           components={{ Toolbar: CustomToolbar }}
-          style={{ minWidth: '900px' }}
+          style={{ width: '100%', height: '100%' }}
           sx={{
+            "& .MuiDataGrid-root": {
+              border: "none",
+            },
             '& .MuiDataGrid-columnHeaders': {
-              backgroundColor: '#f5f5f5',
+              backgroundColor: 'white',
               fontWeight: 'bold',
+              borderBottom: 'none',
             },
             '& .MuiDataGrid-cell': {
-              padding: '10px',
+              borderBottom: 'none',
+              padding: '15px',
             },
+            "& .MuiDataGrid-virtualScroller": {
+              backgroundColor: '#EEEEEE', 
+              overflowY: 'auto',
+            },
+            "& .MuiDataGrid-footerContainer": {
+              borderTop: "none",
+              backgroundColor: 'white', // Adjust as needed
+            },
+            "& .MuiCheckbox-root": {
+              color: '#A0E7E5 !important', // Adjust as needed
+            },
+            "& .MuiDataGrid-toolbarContainer .MuiButton-text": {
+              color: '#FFFFFF !important', // Adjust as needed
+            }
           }}
         />
       </div>  
