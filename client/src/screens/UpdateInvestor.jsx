@@ -18,11 +18,18 @@ function UpdateInvestor() {
     const [investments, setInvestment] = useState({});
 
     const [Company, setCompany]= useState('');
+    const [Company_Investor, setCompany_Investor]= useState('');
     const [Domicile, setDomicile]= useState('');
     const [Year_Of_Operation,setYear_Of_Operation]= useState('');
     const [Business, setBusiness]= useState('');
     const [Percentage_Ownership,setPercentage_Ownership]= useState('');
+    const [Revenue, setRevenue]= useState('');
+    const [Expense, setExpense]= useState('');
+    const [Ebida, setEbida]= useState('');
+    const [Tax_Investment, setTax_Investment]= useState('');
     const [Price_Asset,setPrice_Asset]= useState('');
+    const [Price_Liability, setPrice_Liability]= useState('');
+    const [Equity, setEquity]= useState('');
     const [Date_Of_Ownership, setDate_Of_Ownership]= useState('');
 
     useEffect(()=>{
@@ -31,11 +38,18 @@ function UpdateInvestor() {
         .catch(err=>console.log(err));
 
         setCompany(investments.Company);
+        setCompany_Investor(investments.Company_Investor)
         setDomicile(investments.Domicile);
         setYear_Of_Operation(investments.Year_Of_Operation);
         setBusiness(investments.Business);
         setPercentage_Ownership(investments.Percentage_Ownership);
+        setRevenue(investments.Revenue);
+        setExpense(investments.Expense);
+        setEbida(investments.Ebida);
+        setTax_Investment(investments.Tax_Investment);
         setPrice_Asset(investments.Price_Asset);
+        setPrice_Liability(investments.Price_Liability);
+        setEquity(investments.Equity);
         setDate_Of_Ownership(investments.Date_Of_Ownership);
     },[]
     )
@@ -77,13 +91,20 @@ function UpdateInvestor() {
     const handleSubmit =async (e)=>{
         
         await axios.put(`http://localhost:8080/api/update/investment/${id}`,{
-            Company,
-            Domicile,
-            Year_Of_Operation,
-            Business,
-            Percentage_Ownership,
-            Price_Asset,
-            Date_Of_Ownership
+          Company,
+          Company_Investor,   
+          Domicile,
+          Year_Of_Operation,
+          Business,
+          Percentage_Ownership,
+          Revenue,
+          Expense,
+          Ebida,
+          Tax_Investment,
+          Price_Asset,
+          Price_Liability,
+          Equity,
+          Date_Of_Ownership
         })
     .then(navigate('/investments'))
     .catch(err=>console.log(err));
@@ -119,6 +140,10 @@ function UpdateInvestor() {
                 <td><input type='text' defaultValue={Company} onChange={(e)=>setCompany(e.target.value)} placeholder={investments.Company}/></td>
               </tr>
               <tr>
+                <td className='form-field-name'>Company Investment:</td>
+                <td><input type='text' defaultValue={Company_Investor} onChange={(e)=>setCompany_Investor(e.target.value)} placeholder={investments.Company_Investor}/></td>
+              </tr>
+              <tr>
                 <td className='form-field-name'>Domicile:</td>
                 <td><input type='text' defaultValue={Domicile} onChange={(e)=>setDomicile(e.target.value)} placeholder={investments.Domicile}/></td>
               </tr>
@@ -135,8 +160,32 @@ function UpdateInvestor() {
                 <td><input type='number' defaultValue={Percentage_Ownership} onChange={(e)=>setPercentage_Ownership(e.target.value)} placeholder={investments.Percentage_Ownership}/></td>
               </tr>
               <tr>
+                <td className='form-field-name'>Revenue:</td>
+                <td><input type='number' defaultValue={Revenue} onChange={(e)=>setRevenue(e.target.value)} placeholder={investments.Revenue}/></td>
+              </tr>
+              <tr>
+                <td className='form-field-name'>Expense:</td>
+                <td><input type='number' defaultValue={Expense} onChange={(e)=>setExpense(e.target.value)} placeholder={investments.Expense}/></td>
+              </tr>
+              <tr>
+                <td className='form-field-name'>Ebida:</td>
+                <td><input type='number' defaultValue={Ebida} onChange={(e)=>setEbida(e.target.value)} placeholder={investments.Ebida}/></td>
+              </tr>
+              <tr>
+                <td className='form-field-name'>Tax Investment:</td>
+                <td><input type='number' defaultValue={Tax_Investment} onChange={(e)=>setTax_Investment(e.target.value)} placeholder={investments.Tax_Investment}/></td>
+              </tr>
+              <tr>
                 <td className='form-field-name'>Price of asset:</td>
                 <td><input type='number' defaultValue={Price_Asset} onChange={(e)=>setPrice_Asset(e.target.value)} placeholder={investments.Price_Asset}/></td>
+              </tr>
+              <tr>
+                <td className='form-field-name'>Price Liability:</td>
+                <td><input type='number' defaultValue={Price_Liability} onChange={(e)=>setPrice_Liability(e.target.value)} placeholder={investments.Price_Liability}/></td>
+              </tr>
+              <tr>
+                <td className='form-field-name'>Equity:</td>
+                <td><input type='number' defaultValue={Equity} onChange={(e)=>setEquity(e.target.value)} placeholder={investments.Equity}/></td>
               </tr>
               <tr>
                 <td className='form-field-name'>Date of Ownership:</td>

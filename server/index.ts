@@ -155,21 +155,35 @@ app.get("/api/get/investment/:id", async(req:Request, res: Response,next:NextFun
 app.post("/api/post/investment", async(req:Request, res: Response, next:NextFunction)=>{
     const{
         Company,
+        Company_Investor,   
         Domicile,
         Year_Of_Operation,
         Business,
         Percentage_Ownership,
+        Revenue,
+        Expense,
+        Ebida,
+        Tax_Investment,
         Price_Asset,
+        Price_Liability,
+        Equity,
         Date_Of_Ownership
     } = req.body
 
     const newInvestment = new Investment({
         Company,
+        Company_Investor,   
         Domicile,
         Year_Of_Operation,
         Business,
         Percentage_Ownership,
+        Revenue,
+        Expense,
+        Ebida,
+        Tax_Investment,
         Price_Asset,
+        Price_Liability,
+        Equity,
         Date_Of_Ownership
     })
 

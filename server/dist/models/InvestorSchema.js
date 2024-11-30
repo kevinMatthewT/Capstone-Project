@@ -26,11 +26,18 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const mongoose_1 = __importStar(require("mongoose"));
 const investmentSchema = new mongoose_1.Schema({
     Company: String,
+    Company_Investor: String,
     Domicile: String,
     Year_Of_Operation: Number,
     Business: String,
     Percentage_Ownership: Number,
+    Revenue: Number,
+    Expense: Number,
+    Ebida: Number,
+    Tax_Investment: Number,
     Price_Asset: Number,
+    Price_Liability: Number,
+    Equity: Number,
     Date_Of_Ownership: Date
 });
 const Investment = mongoose_1.default.model("Investment", investmentSchema, "investments");

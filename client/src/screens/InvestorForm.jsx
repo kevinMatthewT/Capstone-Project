@@ -29,11 +29,18 @@ function InvestorForm() {
     const navigate=useNavigate();
 
     const [Company, setCompany]= useState('');
+    const [Company_Investor, setCompany_Investor]= useState('');
     const [Domicile, setDomicile]= useState('');
     const [Year_Of_Operation,setYear_Of_Operation]= useState('');
     const [Business, setBusiness]= useState('');
     const [Percentage_Ownership,setPercentage_Ownership]= useState('');
+    const [Revenue, setRevenue]= useState('');
+    const [Expense, setExpense]= useState('');
+    const [Ebida, setEbida]= useState('');
+    const [Tax_Investment, setTax_Investment]= useState('');
     const [Price_Asset,setPrice_Asset]= useState('');
+    const [Price_Liability, setPrice_Liability]= useState('');
+    const [Equity, setEquity]= useState('');
     const [Date_Of_Ownership, setDate_Of_Ownership]= useState('');
 
 
@@ -66,11 +73,18 @@ function InvestorForm() {
 
       await axios.post("http://localhost:8080/api/post/investment",{
         Company,
+        Company_Investor,   
         Domicile,
         Year_Of_Operation,
         Business,
         Percentage_Ownership,
+        Revenue,
+        Expense,
+        Ebida,
+        Tax_Investment,
         Price_Asset,
+        Price_Liability,
+        Equity,
         Date_Of_Ownership
     })
   .then(alert("New investment added"),navigate('/investments'))
@@ -106,6 +120,10 @@ function InvestorForm() {
                     <td><input type='text' value={Company} onChange={(e)=>setCompany(e.target.value)}/></td>
                   </tr>
                   <tr>
+                    <td className='form-field-name'>Company Investor:</td>
+                    <td><input type='text' value={Company_Investor} onChange={(e)=>setCompany_Investor(e.target.value)}/></td>
+                  </tr>
+                  <tr>
                     <td className='form-field-name'>Domicile:</td>
                     <td><input type='text' value={Domicile} onChange={(e)=>setDomicile(e.target.value)}/></td>
                   </tr>
@@ -122,8 +140,32 @@ function InvestorForm() {
                     <td><input type='number' value={Percentage_Ownership} onChange={(e)=>setPercentage_Ownership(e.target.value)}/></td>
                   </tr>
                   <tr>
+                    <td className='form-field-name'>Revenue:</td>
+                    <td><input type='number' value={Revenue} onChange={(e)=>setRevenue(e.target.value)}/></td>
+                  </tr>
+                  <tr>
+                    <td className='form-field-name'>Expense:</td>
+                    <td><input type='number' value={Expense} onChange={(e)=>setExpense(e.target.value)}/></td>
+                  </tr>
+                  <tr>
+                    <td className='form-field-name'>Ebida:</td>
+                    <td><input type='number' value={Ebida} onChange={(e)=>setEbida(e.target.value)}/></td>
+                  </tr>
+                  <tr>
+                    <td className='form-field-name'>Tax Investment:</td>
+                    <td><input type='number' value={Tax_Investment} onChange={(e)=>setTax_Investment(e.target.value)}/></td>
+                  </tr>
+                  <tr>
                     <td className='form-field-name'>Price of asset:</td>
                     <td><input type='number' value={Price_Asset} onChange={(e)=>setPrice_Asset(e.target.value)}/></td>
+                  </tr>
+                  <tr>
+                    <td className='form-field-name'>Price Liability:</td>
+                    <td><input type='number' value={Price_Liability} onChange={(e)=>setPrice_Liability(e.target.value)}/></td>
+                  </tr>
+                  <tr>
+                    <td className='form-field-name'>Equity:</td>
+                    <td><input type='number' value={Equity} onChange={(e)=>setEquity(e.target.value)}/></td>
                   </tr>
                   <tr>
                     <td className='form-field-name'>Date of Ownership:</td>

@@ -149,14 +149,21 @@ app.get("/api/get/investment/:id", (req, res, next) => __awaiter(void 0, void 0,
 // })
 //post operations
 app.post("/api/post/investment", (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
-    const { Company, Domicile, Year_Of_Operation, Business, Percentage_Ownership, Price_Asset, Date_Of_Ownership } = req.body;
+    const { Company, Company_Investor, Domicile, Year_Of_Operation, Business, Percentage_Ownership, Revenue, Expense, Ebida, Tax_Investment, Price_Asset, Price_Liability, Equity, Date_Of_Ownership } = req.body;
     const newInvestment = new InvestorSchema_1.default({
         Company,
+        Company_Investor,
         Domicile,
         Year_Of_Operation,
         Business,
         Percentage_Ownership,
+        Revenue,
+        Expense,
+        Ebida,
+        Tax_Investment,
         Price_Asset,
+        Price_Liability,
+        Equity,
         Date_Of_Ownership
     });
     try {
