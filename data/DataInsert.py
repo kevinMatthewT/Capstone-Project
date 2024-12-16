@@ -3,7 +3,7 @@ import json
 
 #using terminal, type in "python DummyInsert.py" to run this file
 
-POST_GATEWAY="http://localhost:8080/api/post/investment"
+POST_GATEWAY="http://localhost:8080/api/post/investment/many"
 JSON_DATA="./DummyData.json"
 
 with open(JSON_DATA, "r") as file:
@@ -11,7 +11,7 @@ with open(JSON_DATA, "r") as file:
 
 try:
     response = requests.post(POST_GATEWAY, json=data, headers={"Content-Type": "application/json"})
-    if response.status_code == 201:
+    if response.status_code == 201 or response.status_code==200:
         print("Data successfully sent to the API!")
         print(response.json())  
     else:

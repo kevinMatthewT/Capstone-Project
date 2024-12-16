@@ -24,7 +24,31 @@ const investmentSchema = new mongoose.Schema({
     type: Number,
     required: true,
   },
+  Revenue: {
+    type: Number,
+    required: true,
+  },
+  Expense: {
+    type: Number,
+    required: true,
+  },
+  Ebida: {
+    type: Number,
+    required: true,
+  },
+  Tax_Investment: {
+    type: Number,
+    required: true,
+  },
   Price_Asset: {
+    type: Number,
+    required: true,
+  },
+  Price_Liability: {
+    type: Number,
+    required: true,
+  },
+  Equity: {
     type: Number,
     required: true,
   },

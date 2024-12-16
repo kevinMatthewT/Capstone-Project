@@ -162,6 +162,40 @@ app.post("/api/post/investment", (req, res, next) => __awaiter(void 0, void 0, v
         next(res.status(500).json({ error: "Investments not saved" }));
     }
 }));
+app.post("/api/post/investment/many", (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+    const multipleInvestments = req.body;
+    if (!Array.isArray(multipleInvestments)) {
+        res.status(400).json({
+            error: "Request body must be an array of investments.",
+        });
+        return;
+    }
+    const Investments = multipleInvestments.map((item) => ({
+        Company: item.Company,
+        Company_Investor: item.Company_Investor,
+        Domicile: item.Domicile,
+        Year_Of_Operation: item.Year_Of_Operation,
+        Business: item.Business,
+        Percentage_Ownership: item.Percentage_Ownership,
+        Revenue: item.Revenue,
+        Expense: item.Expense,
+        Ebida: item.Ebida,
+        Tax_Investment: item.Tax_Investment,
+        Price_Asset: item.Price_Asset,
+        Price_Liability: item.Price_Liability,
+        Equity: item.Equity,
+        COGS: item.COGS,
+        Date_Of_Ownership: item.Date_Of_Ownership,
+    }));
+    try {
+        yield InvestorSchema_1.default.insertMany(Investments);
+        res.status(200).json({ status: "Investment saved" });
+    }
+    catch (error) {
+        console.error(error);
+        next(res.status(500).json({ error: "Investments not saved" }));
+    }
+}));
 //delete 
 app.delete("/api/delete/investment/:id", (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
