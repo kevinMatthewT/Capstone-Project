@@ -41,6 +41,7 @@ function InvestorForm() {
     const [Price_Asset,setPrice_Asset]= useState('');
     const [Price_Liability, setPrice_Liability]= useState('');
     const [Equity, setEquity]= useState('');
+    const [COGS,setCOGS]= useState('')
     const [Date_Of_Ownership, setDate_Of_Ownership]= useState('');
 
 
@@ -85,6 +86,7 @@ function InvestorForm() {
         Price_Asset,
         Price_Liability,
         Equity,
+        COGS,
         Date_Of_Ownership
     })
   .then(alert("New investment added"),navigate('/investments'))
@@ -167,7 +169,10 @@ function InvestorForm() {
                     <td className='form-field-name'>Equity:</td>
                     <td><input type='number' value={Equity} onChange={(e)=>setEquity(e.target.value)}/></td>
                   </tr>
-                  
+                  <tr>
+                    <td className='form-field-name'>COGS:</td>
+                    <td><input type='number' value={COGS} onChange={(e)=>setCOGS(e.target.value)}/></td>
+                  </tr>
                   <tr>
                     <td className='form-field-name'>Date of Ownership:</td>
                     <td><input type='date' value={Date_Of_Ownership} onChange={(e)=>setDate_Of_Ownership(e.target.value)}/></td>

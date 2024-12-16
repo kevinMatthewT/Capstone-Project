@@ -30,6 +30,7 @@ function UpdateInvestor() {
     const [Price_Asset,setPrice_Asset]= useState('');
     const [Price_Liability, setPrice_Liability]= useState('');
     const [Equity, setEquity]= useState('');
+    const [COGS,setCOGS]=useState('')
     const [Date_Of_Ownership, setDate_Of_Ownership]= useState('');
 
     useEffect(()=>{
@@ -50,6 +51,7 @@ function UpdateInvestor() {
         setPrice_Asset(investments.Price_Asset);
         setPrice_Liability(investments.Price_Liability);
         setEquity(investments.Equity);
+        setCOGS(investments.COGS);
         setDate_Of_Ownership(investments.Date_Of_Ownership);
     },[]
     )
@@ -104,6 +106,7 @@ function UpdateInvestor() {
           Price_Asset,
           Price_Liability,
           Equity,
+          COGS,
           Date_Of_Ownership
         })
     .then(navigate('/investments'))
@@ -186,6 +189,10 @@ function UpdateInvestor() {
               <tr>
                 <td className='form-field-name'>Equity:</td>
                 <td><input type='number' defaultValue={Equity} onChange={(e)=>setEquity(e.target.value)} placeholder={investments.Equity}/></td>
+              </tr>
+              <tr>
+                <td className='form-field-name'>COGS:</td>
+                <td><input type='number' defaultValue={COGS} onChange={(e)=>setCOGS(e.target.value)} placeholder={investments.COGS}/></td>
               </tr>
               <tr>
                 <td className='form-field-name'>Date of Ownership:</td>
