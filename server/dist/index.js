@@ -131,25 +131,10 @@ app.get("/api/get/investment/:id", (req, res, next) => __awaiter(void 0, void 0,
         next(res.status(500).json({ error: "Investments not found" }));
     }
 }));
-// app.get("/api/get/investment/All/:fn1/:fn2/:fn3/:fn4/:fn5/:fn6", async(req:Request, res: Response,next:NextFunction)=>{
-//     try{
-//         const filtername1= req.params.fn1;
-//         const filtername2= req.params.fn2;
-//         const filtername3= req.params.fn3;
-//         const filtername4= req.params.fn4;
-//         const filtername5= req.params.fn5;
-//         const filtername6= req.params.fn6;
-//         const allInvestments=await Investment.find({Business:{$regex: filtername2}});
-//         res.status(200).json(allInvestments);
-//     }
-//     catch(error){
-//         console.error(error);
-//         next(res.status(500).json({error:"Investments not found"}));
-//     }
-// })
 //post operations
 app.post("/api/post/investment", (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
-    const { Company, Company_Investor, Domicile, Year_Of_Operation, Business, Percentage_Ownership, Revenue, Expense, Ebida, Tax_Investment, Price_Asset, Price_Liability, Equity, Date_Of_Ownership } = req.body;
+    const { Company, Company_Investor, Domicile, Year_Of_Operation, Business, Percentage_Ownership, Revenue, Expense, Ebida, Tax_Investment, Price_Asset, Price_Liability, Equity, COGS, //cost of good sales
+    Date_Of_Ownership } = req.body;
     const newInvestment = new InvestorSchema_1.default({
         Company,
         Company_Investor,
@@ -164,6 +149,7 @@ app.post("/api/post/investment", (req, res, next) => __awaiter(void 0, void 0, v
         Price_Asset,
         Price_Liability,
         Equity,
+        COGS,
         Date_Of_Ownership
     });
     try {
@@ -189,17 +175,25 @@ app.delete("/api/delete/investment/:id", (req, res, next) => __awaiter(void 0, v
 }));
 //post
 app.put("/api/update/investment/:id", (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
-    const { Company, Domicile, Year_Of_Operation, Business, Percentage_Ownership, Price_Asset, Date_Of_Ownership } = req.body;
+    const { Company, Company_Investor, Domicile, Year_Of_Operation, Business, Percentage_Ownership, Revenue, Expense, Ebida, Tax_Investment, Price_Asset, Price_Liability, Equity, COGS, Date_Of_Ownership } = req.body;
     const uid = req.params.id;
     try {
         yield InvestorSchema_1.default.updateOne({ _id: uid }, {
             $set: {
                 Company: Company,
+                Company_Investor: Company_Investor,
                 Domicile: Domicile,
                 Year_Of_Operation: Year_Of_Operation,
                 Business: Business,
                 Percentage_Ownership: Percentage_Ownership,
+                Revenue: Revenue,
+                Expense: Expense,
+                Ebida: Ebida,
+                Tax_Investment: Tax_Investment,
                 Price_Asset: Price_Asset,
+                Price_Liability: Price_Liability,
+                Equity: Equity,
+                COGS: COGS,
                 Date_Of_Ownership: Date_Of_Ownership
             }
         });

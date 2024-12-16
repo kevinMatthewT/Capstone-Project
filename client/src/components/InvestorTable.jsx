@@ -85,6 +85,7 @@ function InvestorTable({isSidebarOpen}) {
         { field: 'Price_Asset', headerName: 'Price Asset', flex: 1 },
         { field: 'Price_Liability', headerName: 'Price Liability', flex: 1 },
         { field: 'Equity', headerName: 'Equity', flex: 1 },
+        { field: 'COGS', headerName:'COGS', flex:1}
         { field: 'Date_Of_Ownership', headerName: 'Date of Ownership', flex: 1, 
           valueFormatter: (params) => {
             return params.value
@@ -122,28 +123,13 @@ function InvestorTable({isSidebarOpen}) {
         Price_Asset: investment.Price_Asset,
         Price_Liability: investment.Price_Liability,
         Equity: investment.Equity,
+        COGS:investment.COGS,
         Date_Of_Ownership: investment.Date_Of_Ownership
           ? format(new Date(investment.Date_Of_Ownership), 'dd-MM-yyyy')
           : ''
     }));
     return (
     <>
-    {/* <div className='header-container'>
-        <p className='filter-text'>Set Filters</p>      
-        <select size="3" className='filter-box'>
-        <option value={Filter} onClick={()=>setFilter('')}>No Filter</option>
-            <option value={Filter} onClick={()=>setFilter('Company')}>company</option>
-            <option value={Filter} onClick={()=>setFilter('Domicile')}>Domicile</option>
-            <option value={Filter} onClick={()=>setFilter('Year_Of_Operation')}>Year_Of_Operation</option>
-            <option value={Filter} onClick={()=>setFilter('Business')}>Busienss</option>
-            <option value={Filter} onClick={()=>setFilter('Percentage_Ownership')}>Percentage_Ownership</option>
-            <option value={Filter} onClick={()=>setFilter('Price_Asset')}>Price_Asset</option>
-            <option value={Filter} onClick={()=>setFilter('Date_Of_Ownership')} >Date_Of_Ownership</option>
-        </select>
-        <input type={inputType} value={FilterValue} onChange={(e)=>setFilterValue(e.target.value)} onClick={toggleInput} className='search-box'/>
-        {/* <button onClick={toggleInput}>go filter</button>
-        </div> */}  
-
     <div style={{ ...containerStyle(isSidebarOpen), padding: '16px 0' }}>
       <div style={{ width: '100%', height: '600px', backgroundColor: 'white', borderRadius: '8px', boxShadow: '0px 4px 12px rgba(0, 0, 0, 0.1)' }}>
         <DataGrid

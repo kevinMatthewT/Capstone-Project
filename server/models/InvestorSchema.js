@@ -28,6 +28,10 @@ const investmentSchema = new mongoose.Schema({
     type: Number,
     required: true,
   },
+  COGS:{
+    type:Number,
+    required:true
+  },
   Date_Of_Ownership: {
     type: Date,
   },

@@ -15,6 +15,7 @@ type InvestmentType = Document & {
   Price_Asset:number,
   Price_Liability:number,
   Equity:number,
+  COGS:number,
   Date_Of_Ownership:Date
 }
 
@@ -32,6 +33,7 @@ const investmentSchema : Schema<InvestmentType>= new Schema({
   Price_Asset:Number,
   Price_Liability:Number,
   Equity:Number,
+  COGS:Number,
   Date_Of_Ownership:Date
 });
 

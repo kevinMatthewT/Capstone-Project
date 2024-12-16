@@ -38,6 +38,7 @@ const investmentSchema = new mongoose_1.Schema({
     Price_Asset: Number,
     Price_Liability: Number,
     Equity: Number,
+    COGS: Number,
     Date_Of_Ownership: Date
 });
 const Investment = mongoose_1.default.model("Investment", investmentSchema, "investments");
