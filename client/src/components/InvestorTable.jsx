@@ -85,7 +85,7 @@ function InvestorTable({isSidebarOpen}) {
         { field: 'Price_Asset', headerName: 'Price Asset', flex: 1 },
         { field: 'Price_Liability', headerName: 'Price Liability', flex: 1 },
         { field: 'Equity', headerName: 'Equity', flex: 1 },
-        { field: 'COGS', headerName:'COGS', flex:1}
+        { field: 'COGS', headerName:'COGS', flex:1},
         { field: 'Date_Of_Ownership', headerName: 'Date of Ownership', flex: 1, 
           valueFormatter: (params) => {
             return params.value
