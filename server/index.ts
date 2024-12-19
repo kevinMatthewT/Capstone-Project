@@ -33,7 +33,7 @@ app.get("/api/get/investment", async(req:Request, res: Response,next:NextFunctio
     }
 })
 
-app.get("/api/get/investment/Company/filter:filtername", async(req:Request, res: Response,next:NextFunction)=>{
+app.get("/api/get/investment/Company/filter/:filtername", async(req:Request, res: Response,next:NextFunction)=>{
     try{
         const filtername= req.params.filtername;
         const allInvestments=await Investment.find({Company:{$regex: filtername}});

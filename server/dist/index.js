@@ -40,7 +40,7 @@ app.get("/api/get/investment", (req, res, next) => __awaiter(void 0, void 0, voi
         next(res.status(500).json({ error: "Investments not found" }));
     }
 }));
-app.get("/api/get/investment/Company/filter:filtername", (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+app.get("/api/get/investment/Company/filter/:filtername", (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const filtername = req.params.filtername;
         const allInvestments = yield InvestorSchema_1.default.find({ Company: { $regex: filtername } });
