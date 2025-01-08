@@ -21,7 +21,7 @@ companies = [
 
 investors = ["Global Ventures", "Green Capital", "Venture Builders","Great Investors","Beverage Lovers"]
 businesses = ["Technology", "Construction", "Finance", "Healthcare", "F&B"]
-domiciles = ["Jakarta", "Bali", "Semarang", "Tangerang","Bekasi","Singapore"]
+# domiciles = ["Jakarta", "Bali", "Semarang", "Tangerang","Bekasi","Singapore"]
 
 def generate_financial_data():
     revenue = random.randint(500000, 5000000)
@@ -39,8 +39,10 @@ data = []
 for _ in range(50):
     id= random.randint(0,4)
     company = companies[id]
-    investor = random.choice(investors)
-    domicile = random.choice(domiciles)
+    # investor = random.choice(investors)
+    investor = "Great Investors"
+    # domicile = random.choice(domiciles)
+    domicile = "Jakarta"
     year_of_operation = random.randint(2000, 2022)
     business = businesses[id]
     percentage_ownership = random.randint(10, 100)
