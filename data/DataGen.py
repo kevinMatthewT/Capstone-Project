@@ -5,7 +5,7 @@ import json
 from datetime import datetime, timedelta
 import random
 
-def random_date(start_year=2010, end_year=2023):
+def random_date(start_year=2021, end_year=2023):
     start_date = datetime(start_year, 1, 1)
     end_date = datetime(end_year, 12, 31)
     random_days = random.randint(0, (end_date - start_date).days)
