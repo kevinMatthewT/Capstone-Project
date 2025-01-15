@@ -1,0 +1,104 @@
+# this is a file to generate dummy data for testing the application on mongodb for prediction models
+# will not be used for the actual system once deployed
+
+import json
+from datetime import datetime, timedelta
+import random
+
+# date_and_time = datetime.datetime(2021, 8, 22)
+
+companies = [
+    "Pear",
+    "Master Builders",
+    "Finance Helpers",
+    "Central Hospital",
+    "Foodies Restaurant"
+]
+
+investors = ["Global Ventures", "Green Capital", "Venture Builders","Great Investors","Beverage Lovers"]
+businesses = ["Technology", "Construction", "Finance", "Healthcare", "F&B"]
+# domiciles = ["Jakarta", "Bali", "Semarang", "Tangerang","Bekasi","Singapore"]
+
+def generate_financial_data():
+    revenue = random.randint(500000, 5000000)
+    expense = random.randint(300000, int(revenue * 0.9))  # Expenses < Revenue
+    cogs = random.randint(50000, 200000)  # COGS is smaller scale
+    ebida = revenue - expense - cogs  # Basic EBIDA calculation
+    tax_investment = int(ebida * 0.2) if ebida > 0 else 0  # Tax is 20% of EBIDA
+    price_asset = random.randint(1000000, 10000000)
+    price_liability = random.randint(500000, int(price_asset * 0.7))  # Liability < Asset
+    equity = price_asset - price_liability  # Equity calculation
+    return revenue, expense, cogs, ebida, tax_investment, price_asset, price_liability, equity
+
+# Create 50 JSON entries
+data = []
+
+for m in range (1,13):
+    if m == 2:  # February
+        days = 28
+    elif m in [4, 6, 9, 11]:  # Months with 30 days
+        days = 30
+    else:  # Months with 31 days
+        days = 31
+
+    for d in range(1, days + 1):  # Loop through days
+        company = "Finance Helpers"
+        investor = "Great Investors"
+        domicile = "Jakarta"
+        year_of_operation = 2010
+        business = "Finance"
+        percentage_ownership = random.randint(10, 100)
+
+        revenue, expense, cogs, ebida, tax_investment, price_asset, price_liability, equity = generate_financial_data()
+        date_of_ownership = datetime(2024, m, d)
+
+        data.append({
+            "Company": company,
+            "Company_Investor": investor,
+            "Domicile": domicile,
+            "Year_Of_Operation": year_of_operation,
+            "Business": business,
+            "Percentage_Ownership": percentage_ownership,
+            "Revenue": revenue,
+            "Expense": expense,
+            "Ebida": ebida,
+            "Tax_Investment": tax_investment,
+            "Price_Asset": price_asset,
+            "Price_Liability": price_liability,
+            "Equity": equity,
+            "COGS": cogs,
+            "Date_Of_Ownership": date_of_ownership.strftime("%Y-%m-%d")  # Serialize datetime as string
+        })
+    # company = companies[2]
+    # investor = "Great Investors"
+    # domicile = "Jakarta"
+    # year_of_operation = 2010
+
+    # business = businesses[id]
+    # percentage_ownership = random.randint(10, 100)
+    # revenue, expense, cogs, ebida, tax_investment, price_asset, price_liability, equity = generate_financial_data()
+    # date_of_ownership = datetime.datetime(2024,m+1,d+1)
+
+    # data.append({
+    #     "Company": company,
+    #     "Company_Investor": investor,
+    #     "Domicile": domicile,
+    #     "Year_Of_Operation": year_of_operation,
+    #     "Business": business,
+    #     "Percentage_Ownership": percentage_ownership,
+    #     "Revenue": revenue,
+    #     "Expense": expense,
+    #     "Ebida": ebida,
+    #     "Tax_Investment": tax_investment,
+    #     "Price_Asset": price_asset,
+    #     "Price_Liability": price_liability,
+    #     "Equity": equity,
+    #     "COGS": cogs,
+    #     "Date_Of_Ownership": date_of_ownership
+    # })
+
+file_path = "data/DummyData.json"
+with open(file_path, "w") as file:
+    json.dump(data, file, indent=2)
+
+#after confirming the data exists in this directory, 
