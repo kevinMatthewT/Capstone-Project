@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import axios from 'axios';
 import {useParams ,useNavigate} from 'react-router-dom'
-import './styles/UpdateInvestor.css'
+// import './styles/UpdateInvestor.css'
 import { useAuthState } from "react-firebase-hooks/auth";
 import { auth } from "../Firebase";
 
@@ -9,6 +9,12 @@ import { auth } from "../Firebase";
 import Sidebar from './global/Sidebar'
 import Topbar from './global/Topbar'
 import HeaderTitle from './global/HeaderTitle';
+
+const containerStyle = (isSidebarOpen) => ({
+  width: `calc(100% - ${isSidebarOpen ? '256px' : '80px'})`,
+  marginLeft: isSidebarOpen ? '256px' : '80px',
+  transition: 'width 0.3s ease, margin-left 0.3s ease', 
+});
 
 function UpdateInvestor() {
     const [isSidebarOpen, setIsSidebarOpen] = useState(true);
@@ -114,12 +120,6 @@ function UpdateInvestor() {
 
     
     }
-
-    const containerStyle = (isSidebarOpen) => ({
-      width: `calc(100% - ${isSidebarOpen ? '256px' : '80px'})`,
-      marginLeft: isSidebarOpen ? '256px' : '80px',
-      transition: 'width 0.3s ease, margin-left 0.3s ease', // smooth transition
-    });
 
     if(user){
   return (

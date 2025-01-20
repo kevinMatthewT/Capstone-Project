@@ -5,13 +5,15 @@
     margin-left: 15.2%;
     margin-top: 5%;
     height: 87vh;
+    overflow-x: hidden;
+    max-width: 100%;
 }
 
 .form-box{
     position: relative;
-    width: 40%;
     left: 30%;
     top: 40px;
+    max-width: 100%;
 }
 
 .form-field-name{

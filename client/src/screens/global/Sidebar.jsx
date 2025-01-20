@@ -1,33 +1,46 @@
 import React, { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 
-import { AnalyticsTwoTone, Description, Menu, NoteAdd, SpeedRounded } from '@mui/icons-material'
+import { AnalyticsTwoTone, Description, Menu, NoteAdd, SpeedRounded, ExpandMore, ChevronRight } from '@mui/icons-material'
+import { SimpleTreeView, TreeItem } from '@mui/x-tree-view';
 import { motion, AnimatePresence} from "framer-motion";
 
-// import Logo from '../';
 
 import LogoImg from "../../assets/MERKLE-logo.png";
 
 const MenuItem = [
-    { name: 'Home Screen',
+    { 
+        id: 'dash-home',
+        name: 'Home Screen',
         icon: SpeedRounded,
         color: "#D32F2F",
         href: '/dashboard',
         section: 'Dashboard'
     },
-    { name: 'Analytics',
+    { 
+        id: 'dash-analytics',
+        name: 'Analytics',
         icon: AnalyticsTwoTone,
         color: '#FE938C',
         href: '/analytics',
-        section: 'Dashboard'
+        section: 'Dashboard',
+        children: [
+            { id: 'analytics-1', name: 'Actual Graphs', href: '/analytics/actual-graphs' },
+            { id: 'analytics-2', name: 'Prediction Graphs', href: '/analytics/pred-graphs' },
+            { id: 'analytics-3', name: 'Comparison', href: '/analytics/comparison' },
+        ],
     },
-    { name: 'Investments',
+    { 
+        id: 'app-invest',
+        name: 'Investments',
         icon: Description,
         color: '#4281A4',
         href: '/investments',
         section: 'Application'
     },
-    { name: 'Add New',
+    { 
+        id: 'app-add-new',
+        name: 'Add New',
         icon: NoteAdd,
         color: '#F29E4C',
         href: '/investments/form',
@@ -37,7 +50,12 @@ const MenuItem = [
 
 const Sidebar = ({ isSidebarOpen, setIsSidebarOpen}) => {
 
-    const navigate=useNavigate();
+    const navigate = useNavigate();
+    const [expandedSections, setExpandedSections] = useState({});
+
+    const toggleSection = (id) => {
+        setExpandedSections((prev) => ({ ...prev, [id]: !prev[id] }));
+    };
 
     // Separate menu items by sections
     const DashItems = MenuItem.filter(item => item.section === 'Dashboard');
@@ -89,30 +107,77 @@ const Sidebar = ({ isSidebarOpen, setIsSidebarOpen}) => {
                 </AnimatePresence>
 
                 {DashItems.map((item) => (
-                <Link key={item.href} to={item.href}>
-                    <motion.div className='flex items-center p-4 text-sm font-medium rounded-lg hover:bg-[#badbeb] transition-colors mb-2'>
-                        <item.icon size={20} style={{ color: item.color, minWidth: '20px'}}/>
-                        <AnimatePresence>
-                            {isSidebarOpen && (
-                                <motion.span
-                                className='ml-4 whitespace-nowrap'
-                                initial={{ opacity: 0, width: 0}}
-                                animate={{ opacity: 1, width: "auto"}}
-                                exit={{ opacity: 0, width: 0}}
-                                transition={{ duration: 0.2, delay: 0.1}}
-                                >
+                <div key={item.id}>
+                    {/* Menu Item with Children */}
+                    {item.children ? (
+                    <>
+                        <div
+                        className="flex items-center p-4 text-sm font-medium rounded-lg hover:bg-[#badbeb] transition-colors mb-2 cursor-pointer"
+                        onClick={() => toggleSection(item.id)}
+                        >
+                        <item.icon size={20} style={{ color: item.color, minWidth: '20px' }} />
+                        {isSidebarOpen && (
+                            <motion.span
+                                className="ml-4 whitespace-nowrap flex-grow"
+                                initial={{ opacity: 0, width: 0 }}
+                                animate={{ opacity: 1, width: 'auto' }}
+                                exit={{ opacity: 0, width: 0 }}
+                                transition={{ duration: 0.2, delay: 0.1 }}
+                            >
                                 {item.name}
-                                </motion.span>
-                            )}
+                            </motion.span>
+                        )}
+                        {isSidebarOpen && (
+                            <motion.div className="ml-auto">
+                                {expandedSections[item.id] ? <ExpandMore /> : <ChevronRight />}
+                            </motion.div>
+                        )}
+                        </div>
+
+                        {/* Nested Menu Items */}
+                        <AnimatePresence>
+                        {expandedSections[item.id] && (
+                            <motion.div
+                            initial={{ height: 0, opacity: 0 }}
+                            animate={{ height: 'auto', opacity: 1 }}
+                            exit={{ height: 0, opacity: 0 }}
+                            transition={{ duration: 0.3 }}
+                            className="ml-8 overflow-hidden "
+                            >
+                            {item.children.map((child) => (
+                                <Link key={child.id} to={child.href} className="flex items-center p-4 text-sm font-medium rounded-lg hover:bg-[#badbeb] transition-colors">
+                                • {child.name}
+                                </Link>
+                            ))}
+                            </motion.div>
+                        )}
                         </AnimatePresence>
-                    </motion.div>
-                </Link>
+                    </>
+                    ) : (
+                    <Link to={item.href}>
+                        <motion.div className="flex items-center p-4 text-sm font-medium rounded-lg hover:bg-[#badbeb] transition-colors mb-2">
+                        <item.icon size={20} style={{ color: item.color, minWidth: '20px' }} />
+                            {isSidebarOpen && (
+                            <motion.span
+                                className="ml-4 whitespace-nowrap"
+                                initial={{ opacity: 0, width: 0 }}
+                                animate={{ opacity: 1, width: 'auto' }}
+                                exit={{ opacity: 0, width: 0 }}
+                                transition={{ duration: 0.2, delay: 0.1 }}
+                            >
+                                {item.name}
+                            </motion.span>
+                            )}
+                        </motion.div>
+                    </Link>
+                    )}
+                </div>
                 ))}
             </div>
 
             <hr className="my-4 border-gray-400" />
 
-            {/* Application Section */}
+            {/* Application Section  */}
             <div>
                 {isSidebarOpen && (
                 <motion.p
@@ -146,9 +211,10 @@ const Sidebar = ({ isSidebarOpen, setIsSidebarOpen}) => {
                     </motion.div>
                 </Link>
                 ))}
+
             </div>
         </nav>
-    </div>
+        </div>
     </motion.div>
     )
 }

@@ -33,7 +33,7 @@ function InvestorScreen() {
   if (user){
   return (
     <>
-    <div className='flex min-h-screen h-auto'>
+    <div className=' min-h-screen h-auto'>
       {/* Sidebar */}
       <Sidebar isSidebarOpen={isSidebarOpen} setIsSidebarOpen={setIsSidebarOpen} />
         

@@ -2,31 +2,32 @@ import { useEffect, useState } from 'react'
 import axios from 'axios';
 import {format} from 'date-fns';
 import { useNavigate } from 'react-router-dom'
-import { DataGrid, GridToolbarContainer } from '@mui/x-data-grid';
-import AddIcon from '@mui/icons-material/Add';
+import { DataGrid, GridToolbarContainer, GridToolbarExport, GridToolbarColumnsButton, GridToolbarFilterButton, GridToolbarQuickFilter } from '@mui/x-data-grid';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
 import SaveIcon from '@mui/icons-material/Save';
 import IconButton from '@mui/material/IconButton'
-import { Search } from '@mui/icons-material';
 
 // import './styles/InvestorTable.css';
 
 function CustomToolbar() {
   return (
-    <GridToolbarContainer>
-      <IconButton sx={{ color: '#009688' }} >
-        <SaveIcon /> 
-        CSV Export
-      </IconButton>
-    </GridToolbarContainer>
-  )
+    <GridToolbarContainer style={{ padding: '8px', backgroundColor: '#f9f9f9' }}>
+    <GridToolbarExport />
+    <GridToolbarColumnsButton />
+    <GridToolbarFilterButton />
+    <GridToolbarQuickFilter
+      quickFilterParser={(input) => input.split(',')}
+      quickFilterFormatter={(values) => values.join(',')}
+    />
+  </GridToolbarContainer>
+  );
 }
 
 const containerStyle = (isSidebarOpen) => ({
   width: `calc(100% - ${isSidebarOpen ? '256px' : '80px'})`,
   marginLeft: isSidebarOpen ? '256px' : '80px',
-  transition: 'width 0.3s ease, margin-left 0.3s ease', // smooth matching animation
+  transition: 'width 0.3s ease, margin-left 0.3s ease',
 });
 
 function InvestorTable({isSidebarOpen}) {
@@ -72,21 +73,21 @@ function InvestorTable({isSidebarOpen}) {
     }
 
     const columns = [
-        { field: 'Company', headerName: 'Company', flex: 1 },
-        { field: 'Company_Investor', headerName: 'Company Investor', flex: 1 },
-        { field: 'Domicile', headerName: 'Domicile', flex: 1 },
-        { field: 'Year_Of_Operation', headerName: 'Year of Operation', flex: 1 },
-        { field: 'Business', headerName: 'Business', flex: 1.5 },
-        { field: 'Percentage_Ownership', headerName: 'Percentage Ownership', flex: 1 },
-        { field: 'Revenue', headerName: 'Revenue', flex: 1 },
-        { field: 'Expense', headerName: 'Expense', flex: 1 },
-        { field: 'Ebida', headerName: 'Ebida', flex: 1 },
-        { field: 'Tax_Investment', headerName: 'Tax Investment', flex: 1 },
-        { field: 'Price_Asset', headerName: 'Price Asset', flex: 1 },
-        { field: 'Price_Liability', headerName: 'Price Liability', flex: 1 },
-        { field: 'Equity', headerName: 'Equity', flex: 1 },
-        { field: 'COGS', headerName:'COGS', flex:1},
-        { field: 'Date_Of_Ownership', headerName: 'Date of Ownership', flex: 1, 
+        { field: 'Company', headerName: 'Company', width: 175},
+        { field: 'Company_Investor', headerName: 'Company Investor', width: 175},
+        { field: 'Domicile', headerName: 'Domicile', width: 175},
+        { field: 'Year_Of_Operation', headerName: 'Year of Operation', width: 175},
+        { field: 'Business', headerName: 'Business', width: 175},
+        { field: 'Percentage_Ownership', headerName: 'Percentage Ownership', width: 175},
+        { field: 'Revenue', headerName: 'Revenue', width: 175},
+        { field: 'Expense', headerName: 'Expense', width: 175},
+        { field: 'Ebida', headerName: 'Ebida', width: 175},
+        { field: 'Tax_Investment', headerName: 'Tax Investment', width: 175},
+        { field: 'Price_Asset', headerName: 'Price Asset', width: 175},
+        { field: 'Price_Liability', headerName: 'Price Liability', width: 175},
+        { field: 'Equity', headerName: 'Equity', width: 175},
+        { field: 'COGS', headerName:'COGS', width: 175},
+        { field: 'Date_Of_Ownership', headerName: 'Date of Ownership', width: 175,
           valueFormatter: (params) => {
             return params.value
             // return params.value ? format(new Date(params.value), 'dd-MM-yyyy') : ''; 
@@ -95,6 +96,7 @@ function InvestorTable({isSidebarOpen}) {
         {
             field: 'actions', 
             headerName: 'Actions', 
+            width: 125,
             renderCell: (params) => (
             <div>
                 <IconButton sx={{ color: '#009688' }} onClick={() => navigate(`/investments/update/${params.id}`)}>
@@ -128,51 +130,50 @@ function InvestorTable({isSidebarOpen}) {
           ? format(new Date(investment.Date_Of_Ownership), 'dd-MM-yyyy')
           : ''
     }));
+
     return (
-    <>
-    <div style={{ ...containerStyle(isSidebarOpen), padding: '16px 0' }}>
-      <div style={{ width: '100%', height: '600px', backgroundColor: 'white', borderRadius: '8px', boxShadow: '0px 4px 12px rgba(0, 0, 0, 0.1)' }}>
-        <DataGrid
-          rows={rows}
-          columns={columns}
-          pageSize={10} 
-          rowsPerPageOptions={[10, 15, 25]}
-          disableSelectionOnClick
-          components={{ Toolbar: CustomToolbar }}
-          style={{ width: '100%', height: '100%' }}
-          sx={{
-            "& .MuiDataGrid-root": {
-              border: "none",
-            },
-            '& .MuiDataGrid-columnHeaders': {
-              backgroundColor: 'white',
-              fontWeight: 'bold',
-              borderBottom: 'none',
-            },
-            '& .MuiDataGrid-cell': {
-              borderBottom: 'none',
-              padding: '15px',
-            },
-            "& .MuiDataGrid-virtualScroller": {
-              backgroundColor: '#EEEEEE', 
-              overflowY: 'auto',
-            },
-            "& .MuiDataGrid-footerContainer": {
-              borderTop: "none",
-              backgroundColor: 'white', // Adjust as needed
-            },
-            "& .MuiCheckbox-root": {
-              color: '#A0E7E5 !important', // Adjust as needed
-            },
-            "& .MuiDataGrid-toolbarContainer .MuiButton-text": {
-              color: '#FFFFFF !important', // Adjust as needed
-            }
-          }}
-        />
-      </div>  
+    <div style={{ ...containerStyle(isSidebarOpen),
+      paddingTop: '16px'}}>
+      <DataGrid
+        rows={rows}
+        columns={columns}
+        pageSize={10}
+        rowsPerPageOptions={[10, 15, 25]}
+        components= {{Toolbar:CustomToolbar}}
+        sx={{
+          width: '100%',
+          height: '500px',
+          borderRadius: '8px',
+          boxShadow: '0px 4px 12px rgba(0, 0, 0, 0.1)',
+          overflow: 'hidden',
+
+          // Custom styling for DataGrid components
+          '& .MuiDataGrid-root': {
+            border: "none",
+          },
+          '& .MuiDataGrid-toolbarContainer': {
+            backgroundColor: '#f0f0f0', 
+          },
+          '& .MuiDataGrid-columnHeaders': {
+            backgroundColor: 'blue',
+            fontWeight: 'bold',
+            borderBottom: '1px solid black',
+          },
+          '& .MuiDataGrid-cell': {
+            borderBottom: 'none',
+            padding: '15px',
+          },
+          '& .MuiDataGrid-virtualScroller': {
+            overflowX: 'auto',
+          },
+          '& .MuiDataGrid-footerContainer': {
+            borderTop: "none",
+            backgroundColor: 'gray',
+          },
+        }}
+      />
     </div>
-    </>
-)
+  )
 }
 
 export default InvestorTable
