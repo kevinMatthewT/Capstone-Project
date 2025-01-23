@@ -7,6 +7,7 @@ import path from 'path'
 import { exec } from 'child_process';
 
 dotenv.config();
+exec(`pip install -r ../../pip_requirement.txt`)
 
 const app: Express=express();
 const port = process.env.PORT;

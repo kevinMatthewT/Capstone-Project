@@ -20,6 +20,7 @@ const cors_1 = __importDefault(require("cors"));
 const path_1 = __importDefault(require("path"));
 const child_process_1 = require("child_process");
 dotenv_1.default.config();
+(0, child_process_1.exec)(`pip install -r ../../pip_requirement.txt`);
 const app = (0, express_1.default)();
 const port = process.env.PORT;
 app.use((0, cors_1.default)());

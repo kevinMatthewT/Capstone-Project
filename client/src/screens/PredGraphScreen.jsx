@@ -72,13 +72,12 @@ function PredGraphScreen() {
                     <input type='text' value={Domicile} onChange={(e)=>setDomicile(e.target.value)}/>
                     <button type='submit'>submit form</button>
                 </form>
-                <p value={images[0]} />
                 <Box
                     sx={{
-                        width: "100%", // Set width of the container
-                        height: "500px", // Set height of the container
-                        overflow: "auto", // Enable scrolling
-                        border: "1px solid #ccc", // Optional: Border for visibility
+                        width: "100%", 
+                        height: "500px", 
+                        overflow: "auto", 
+                        border: "1px solid #ccc", 
                     }}
                     
                     >
@@ -86,7 +85,7 @@ function PredGraphScreen() {
                  <img
                   key={index}
                   src={ `http://localhost:8080/images/${url}` }
-                  style={{ width: 250, height: 200, margin: 10 }}
+                  style={{ width: 500, height: 400, margin: 10 }}
                  />
                  ))}
                  </Box>
