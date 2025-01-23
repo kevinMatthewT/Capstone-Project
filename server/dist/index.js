@@ -17,6 +17,8 @@ const dotenv_1 = __importDefault(require("dotenv"));
 const mongoose_1 = __importDefault(require("mongoose"));
 const InvestorSchema_1 = __importDefault(require("./models/InvestorSchema"));
 const cors_1 = __importDefault(require("cors"));
+const path_1 = __importDefault(require("path"));
+const child_process_1 = require("child_process");
 dotenv_1.default.config();
 const app = (0, express_1.default)();
 const port = process.env.PORT;
@@ -196,6 +198,41 @@ app.post("/api/post/investment/many", (req, res, next) => __awaiter(void 0, void
         next(res.status(500).json({ error: "Investments not saved" }));
     }
 }));
+app.get("/api/get/investment/forecast/:company/:investor/:domicile", (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const Company_Name = req.params.company;
+        const Company_Investor_Name = req.params.investor;
+        const Domicile_Name = req.params.domicile;
+        const notebookPath = path_1.default.join(__dirname, '../../prediction/company_forecast.ipynb');
+        const outputNotebookPath = path_1.default.join(__dirname, '../../prediction/executed_company_forecast.ipynb');
+        const imagesDir = path_1.default.join(__dirname, '../../images');
+        const papermillCommand = `papermill "${notebookPath}" "${outputNotebookPath}" -p Company_Name "${Company_Name}" -p Company_Investor_Name "${Company_Investor_Name}" -p Domicile_Name "${Domicile_Name}"`;
+        (0, child_process_1.exec)(papermillCommand, (error, stdout, stderr) => {
+            if (error) {
+                console.error(`Error executing notebook: ${error.message}`);
+                res.status(500).json({ error: 'Notebook execution failed' });
+                return;
+            }
+            console.log(`Notebook executed successfully: ${stdout}`);
+            const imageFiles = [
+                'Revenue.png',
+                'Ebida.png',
+                'Tax_Investment.png',
+                'Price_Asset.png',
+                'Price_Liability.png',
+                'Equity.png',
+                'COGS.png',
+            ];
+            res.status(200).json({
+                images: imageFiles,
+            });
+        });
+    }
+    catch (error) {
+        console.error("Unhandled error:", error.message);
+        res.status(500).json({ error: "Internal server error", details: error.message });
+    }
+}));
 //delete 
 app.delete("/api/delete/investment/:id", (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
@@ -207,7 +244,7 @@ app.delete("/api/delete/investment/:id", (req, res, next) => __awaiter(void 0, v
         console.error(error);
     }
 }));
-//post
+//update
 app.put("/api/update/investment/:id", (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     const { Company, Company_Investor, Domicile, Year_Of_Operation, Business, Percentage_Ownership, Revenue, Expense, Ebida, Tax_Investment, Price_Asset, Price_Liability, Equity, COGS, Date_Of_Ownership } = req.body;
     const uid = req.params.id;
@@ -238,4 +275,5 @@ app.put("/api/update/investment/:id", (req, res, next) => __awaiter(void 0, void
         next(res.status(500).json({ error: "Investments not saved" }));
     }
 }));
+app.use("/images", express_1.default.static(path_1.default.join(__dirname, '../../images')));
 app.listen(port, () => (console.log(`server is running at port ${port}`)));

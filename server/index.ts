@@ -3,6 +3,8 @@ import dotenv from 'dotenv';
 import mongoose from 'mongoose';
 import Investment from './models/InvestorSchema';
 import cors from 'cors';
+import path from 'path'
+import { exec } from 'child_process';
 
 dotenv.config();
 
@@ -225,6 +227,48 @@ app.post("/api/post/investment/many", async(req:Request, res: Response, next:Nex
         }
 })
 
+app.get("/api/get/investment/forecast/:company/:investor/:domicile", async (req: Request, res: Response, next: NextFunction) => {
+    try{
+    const Company_Name = req.params.company ;
+    const Company_Investor_Name = req.params.investor ;
+    const Domicile_Name = req.params.domicile ;
+
+    const notebookPath = path.join(__dirname, '../../prediction/company_forecast.ipynb');
+    const outputNotebookPath = path.join(__dirname, '../../prediction/executed_company_forecast.ipynb');
+    const imagesDir = path.join(__dirname, '../../images');
+
+    const papermillCommand = `papermill "${notebookPath}" "${outputNotebookPath}" -p Company_Name "${Company_Name}" -p Company_Investor_Name "${Company_Investor_Name}" -p Domicile_Name "${Domicile_Name}"`;
+
+    exec(papermillCommand, (error, stdout, stderr) => {
+        if (error) {
+            console.error(`Error executing notebook: ${error.message}`);
+            res.status(500).json({ error: 'Notebook execution failed' });
+            return;
+        }
+
+        console.log(`Notebook executed successfully: ${stdout}`);
+
+        const imageFiles = [
+            'Revenue.png',
+            'Ebida.png',
+            'Tax_Investment.png',
+            'Price_Asset.png',
+            'Price_Liability.png',
+            'Equity.png',
+            'COGS.png',
+        ];
+
+        res.status(200).json({
+            images: imageFiles,
+        });
+    });
+    } catch(error){
+        console.error("Unhandled error:", error.message);
+        res.status(500).json({ error: "Internal server error", details: error.message });
+    }
+});
+
+
 //delete 
 app.delete("/api/delete/investment/:id", async(req:Request, res: Response,next:NextFunction)=>{
     try {
@@ -236,7 +280,7 @@ app.delete("/api/delete/investment/:id", async(req:Request, res: Response,next:N
     }
 })
 
-//post
+//update
 app.put("/api/update/investment/:id", async(req:Request, res: Response,next:NextFunction)=>{
     const{
         Company,
@@ -286,6 +330,8 @@ app.put("/api/update/investment/:id", async(req:Request, res: Response,next:Next
         next(res.status(500).json({error:"Investments not saved"}));
     }
 })
+
+app.use("/images", express.static(path.join(__dirname, '../../images')));
 
 
 app.listen(port,()=>(console.log(`server is running at port ${port}`)))
