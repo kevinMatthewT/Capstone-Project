@@ -64,7 +64,7 @@ function ActualGraphScreen() {
     if(user){
 
     return (
-        <div className='min-h-screen h-auto'>
+        <div className='overflow-x-hidden min-h-screen h-auto'>
         {/* Sidebar */}
         <Sidebar isSidebarOpen={isSidebarOpen} setIsSidebarOpen={setIsSidebarOpen} />
             
@@ -78,26 +78,43 @@ function ActualGraphScreen() {
 
                 {/* Tabs */}
                 <Box className="bg-[#eef2f6] shadow-lg rounded-lg p-4"
-                 sx={{
+                sx={{
                     ...containerStyle(isSidebarOpen), 
                     backgroundColor: 'white',
                     boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)', 
                     borderRadius: 2, 
-                    p: 2, 
-                    mt: 4
+                    paddingTop: '1rem', 
+                    mt: 2
                     }}>
-                    <Tabs value={value} onChange={handleTabChange} aria-label='Graph Tabs' 
+                    <Tabs 
+                    value={value} 
+                    onChange={handleTabChange} 
+                    aria-label='Graph Tabs' 
+                    variant='scrollable'
+                    scrollButtons='auto'
                     sx={{
                         mb: 2,
-                        "& .MuiTabs-flexContainer": { justifyContent: "center" },
-                        "& .MuiTab-root": {
+                        maxWidth: { xs: "100%", sm: "none" },
+                        borderBottom: "1px solid #e0e0e0",
+                        "& .MuiTabs-flexContainer": { justifyContent: "left" }, // Center tabs
+                        "& .MuiTab-root": { // General Tab styles
                             textTransform: "none",
-                            fontWeight: 600,
-                            fontSize: 14,
-                            padding: "12px 16px",
+                            fontSize: "14px",
+                            padding: "0px 12px",
+                            color: "black", // Default text color
                         },
-                        "& .Mui-selected": { color: "#007AFF" },
-                        "& .MuiTabs-indicator": { backgroundColor: "#007AFF" },
+                        "& .MuiTab-root.Mui-selected": { // Selected Tab styles
+                            color: "#647c8c", // Highlighted color
+                            backgroundColor: "#fff",
+                            borderRadius: "8px", // Rounded corners
+                        },
+                        "& .MuiTabs-indicator": { // Indicator (underline) styles
+                            backgroundColor: "#647c8c",
+                            height: "3px", // Custom thickness
+                        },
+                        "& .MuiTabs-scrollButtons": {
+                        display: { xs: "flex", sm: "none" }, // Show scroll buttons only on small viewports
+                        },
                     }}>
                         <Tab icon={<FinanceLogo/>} iconPosition='start' label="Financial Performance" />
                         <Tab icon={<OwnershipLogo/>} iconPosition='start' label="Ownership & Valuation" />
@@ -107,32 +124,32 @@ function ActualGraphScreen() {
                 
                     {/* Tab Panels */}
                     <TabPanel value={value} index={0}>
-                        <Box className="bg-white shadow-lg rounded-lg p-4">
-                        <Typography variant="h5" sx={{ fontWeight: 600, mb: 2 }}>
+                        <Box className="bg-[#eef2f6] rounded-lg p-4 border-2">
+                        <Typography sx={{ fontSize: '36px', fontWeight: 600, m: 2 }}>
                             Financial Performance
                         </Typography>
                         <FinancialPerformance />
                         </Box>
                     </TabPanel>
                     <TabPanel value={value} index={1}>
-                        <Box className="bg-white shadow-lg rounded-lg p-4">
-                        <Typography variant="h5" sx={{ fontWeight: 600, mb: 2 }}>
+                        <Box className="bg-[#eef2f6] rounded-lg p-4 border-2">
+                        <Typography sx={{ fontSize: '36px', fontWeight: 600, m: 2 }}>
                             Ownership & Valuation
                         </Typography>
                         <OwnershipAndValuation />
                         </Box>
                     </TabPanel>
                     <TabPanel value={value} index={2}>
-                        <Box className="bg-white shadow-lg rounded-lg p-4">
-                        <Typography variant="h5" sx={{ fontWeight: 600, mb: 2 }}>
+                        <Box className="bg-[#eef2f6] rounded-lg p-4 border-2">
+                        <Typography sx={{ fontSize: '36px', fontWeight: 600, m: 2 }}>
                             Operational Efficiency
                         </Typography>
                         <OperationalEfficiency />
                         </Box>
                     </TabPanel>
                     <TabPanel value={value} index={3}>
-                        <Box className="bg-white shadow-lg rounded-lg p-4">
-                        <Typography variant="h5" sx={{ fontWeight: 600, mb: 2 }}>
+                        <Box className="bg-[#eef2f6] rounded-lg p-4 border-2">
+                        <Typography sx={{ fontSize: '36px', fontWeight: 600, m: 2 }}>
                             Ownership Timeline
                         </Typography>
                         <OwnershipTimeline />

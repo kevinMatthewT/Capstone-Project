@@ -1,0 +1,23 @@
+Financial Performance
+Revenue vs. Expense: To visualize the relationship between a company's earnings and spending.
+Revenue vs. EBITDA: To understand how revenue translates to earnings before interest, taxes, depreciation, and amortization.
+COGS vs. Revenue: To assess how cost of goods sold correlates with revenue generation.
+Ownership and Valuation
+Percentage_Ownership vs. Equity: To understand how ownership percentage correlates with the equity value of the company.
+Price_Asset vs. Price_Liability: To compare asset and liability values to assess financial health.
+Investment Dynamics
+Tax_Investment vs. Revenue: To see if investment in taxes correlates with revenue.
+Tax_Investment vs. Price_Asset: To understand how tax investments relate to total assets.
+Operational Efficiency
+Year_Of_Operation vs. EBITDA: To assess how the company's operational duration impacts profitability.
+Year_Of_Operation vs. Revenue: To analyze the growth of revenue over years of operation.
+Ownership Timeline
+Date_Of_Ownership vs. Equity: To investigate how equity changes over the ownership timeline.
+menurut lu apa yg perlu diganti dan apa axisnya for each one (x and y)
+Miracle~ — 12/22/2024 4:00 PM
+pake 1,2,4,5 aja
+yang ketiga ga usa pake
+cause i dont think tax investmen
+is there and I or we understand
+but the rest ok
+paling oenting 5

@@ -1,14 +1,21 @@
 import axios from 'axios';
 import React, { useEffect, useState } from 'react';
 import Chart from "react-apexcharts";
-import { Select, MenuItem, FormControl, InputLabel, Divider, Stack, Chip } from '@mui/material';
+import { Select, MenuItem, FormControl, Divider, Stack, Chip, useMediaQuery } from '@mui/material';
 
 const RevenueVsEBIDAGraph = () => {
   const [chartData, setChartData] = useState([]);
-  const [filter, setFilter] = useState('this_month');
+  const [filter, setFilter] = useState('');
+  const [isHovered, setIsHovered] = useState(false);
+  const isSmallScreen = useMediaQuery('(max-width: 720px)');
 
   useEffect(() => {
     const fetchData = async () => {
+
+      if (!filter) {
+        setChartData([])
+      }
+
       let startDate, endDate;
 
       switch (filter) {
@@ -33,10 +40,12 @@ const RevenueVsEBIDAGraph = () => {
         const response = await axios.get(`http://localhost:8080/api/get/investment?start=${startDate}&end=${endDate}`);
         const data = response.data;
 
-        const formattedData = data.map(item => ({
+        const formattedData = data
+        .filter(item => item.Revenue !== null && item.Ebida !== null) // Remove null/undefined values
+        .map(item => ({
           x: item.Revenue,
           y: item.Ebida,
-          company: item.Company
+          company: item.Company,
         }));
 
         setChartData(formattedData);
@@ -59,11 +68,11 @@ const RevenueVsEBIDAGraph = () => {
     },
     xaxis: {
       title: { text: 'Revenue (IDR)' },
-      labels: { formatter: value => `${value.toLocaleString()}` },
+      labels: { formatter: (value) => value ? `${value.toLocaleString()}` : "N/A" },
     },
     yaxis: {
       title: { text: 'EBIDA (IDR)' },
-      labels: { formatter: value => `${value.toLocaleString()}` },
+      labels: { formatter: (value) => value ? `${value.toLocaleString()}` : "N/A" },
     },
     tooltip: {
       custom: ({ series, seriesIndex, dataPointIndex, w }) => {
@@ -73,7 +82,9 @@ const RevenueVsEBIDAGraph = () => {
     },
     markers: {
       size: 6,
-      colors: ['#00E396']
+      colors: ['#00E396'],
+      strokeColors: "#2500E3",
+      strokeWidth: 1,
     },
     grid: {
       borderColor: '#e9ecef',
@@ -87,27 +98,67 @@ const RevenueVsEBIDAGraph = () => {
   }];
 
   return (
-    <div style={{ padding: '16px', width: '100%', height: '450px' }}>
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '8px' }}>
-        <h4 style={{ margin: 0 }}>Revenue Vs EBIDA</h4>
-        <FormControl style={{ width: '200px' }}>
-          <InputLabel>Filter By</InputLabel>
-            <Select value={filter} onChange={(e) => setFilter(e.target.value)}>
-              <MenuItem value="this_month">This Month</MenuItem>
-              <MenuItem value="last_month">Last Month</MenuItem>
-              <MenuItem value="last_90_days">Last 90 Days</MenuItem>
-            </Select>
-        </FormControl>
+    <div style={{ 
+      width: '100%', 
+      borderColor: '#eceff1', 
+      borderWidth: '1px',
+      borderRadius: '8px',
+      boxShadow: isHovered ? "0px 4px 8px rgba(0, 0, 0, 0.2)" : "none",
+      transition: "box-shadow 0.3s ease",
+      backgroundColor: 'white'
+    }}
+    onMouseEnter={() => setIsHovered(true)}
+    onMouseLeave={() => setIsHovered(false)}
+    >
+      <h3 style={{ margin:'14px', padding: "8px", fontSize: '18px', fontWeight: 'bold', color: '#364152' }}>Revenue Vs EBIDA</h3>
+
+        <Divider style={{ marginBottom: '16px', backgroundColor: '#eceff1', width: '100%' }} />
+
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding:'0px 16px'}}>
+
+          {!isSmallScreen && (
+            <Stack spacing={1} direction="row">
+              <Chip label="Revenue" variant="outlined" sx={{ backgroundColor: '#00E396', color: 'black' }} />
+              <Chip label="EBIDA" variant="outlined" sx={{ backgroundColor: '#2500E3', color: 'white' }} />
+            </Stack>
+          )}
+          
+          <FormControl style={{ width: isSmallScreen ? '100%' : '200px' }}
+            sx={{
+              '.MuiOutlinedInput-root': {
+                  borderRadius: '8px', 
+                  backgroundColor: '#f8fafc', 
+              '& fieldset': {
+                  borderColor: '#d3d3d3', 
+              },
+              '&:hover fieldset': {
+                  borderColor: '#a3a3a3', 
+              },
+              '&.Mui-focused fieldset': {
+                  borderColor: '#5a5a5a', 
+                  borderWidth: '2px', 
+              },
+              },
+              '.MuiSelect-select': {
+                  padding: '10px 16px', 
+                  fontSize: '16px', 
+                  color: '#333',
+              },
+          }}>
+              <Select value={filter} onChange={(e) => setFilter(e.target.value)} displayEmpty inputProps={{ 'aria-label': 'Filter By'}}>
+                <MenuItem value="">No Data Selected</MenuItem>
+                <MenuItem value="this_month">This Month</MenuItem>
+                <MenuItem value="last_month">Last Month</MenuItem>
+                <MenuItem value="last_90_days">Last 90 Days</MenuItem>
+              </Select>
+          </FormControl>
+        </div>
+
+      <div style={{padding: '16px'}}>
+        <Divider style={{ marginBottom: '16px', backgroundColor: '#d3d3d3', boxShadow: '0px 2px 4px rgba(0, 0, 0, 0.2)' }} />
+
+        <Chart options={options} series={series} type="scatter" height={450} /> 
       </div>
-
-      <Divider style={{ marginBottom: '16px', backgroundColor: '#d3d3d3', boxShadow: '0px 2px 4px rgba(0, 0, 0, 0.1)' }} />
-
-      <Stack spacing={1} direction="row" style={{ marginBottom: '16px' }}>
-        <Chip label="Revenue" variant="outlined" sx={{ backgroundColor: '#00E396', color: 'black' }} />
-        <Chip label="EBIDA" variant="outlined" sx={{ backgroundColor: '#2500E3', color: 'white' }} />
-      </Stack>
-
-      <Chart options={options} series={series} type="scatter" height={450} />
     </div>
   )
 }

@@ -2,7 +2,7 @@ import axios from 'axios';
 import React, { useEffect, useState } from 'react';
 import Chart from 'react-apexcharts';
 import { format, subMonths, subDays, startOfMonth, endOfMonth } from 'date-fns';
-import { Stack, Chip, Select, MenuItem, FormControl, InputLabel, Divider } from '@mui/material';
+import { Stack, Chip, Select, MenuItem, FormControl, useMediaQuery, Divider } from '@mui/material';
 
 const PriceAssetVsPriceLiabilityGraph = () => {
   const [chartData, setChartData] = useState({
@@ -11,10 +11,17 @@ const PriceAssetVsPriceLiabilityGraph = () => {
     liabilityData: [],
   });
 
-  const [filter, setFilter] = useState('this_month');
+  const [filter, setFilter] = useState('');
+  const [isHovered, setIsHovered] = useState(false);
+  const isSmallScreen = useMediaQuery('(max-width: 720px)');
 
   useEffect(() => {
     const fetchData = async () => {
+
+      if (!filter) {
+        setChartData({ categories: [], assetData: [], liabilityData: []})
+      }
+
       let startDate, endDate;
 
       switch (filter) {
@@ -69,13 +76,11 @@ const PriceAssetVsPriceLiabilityGraph = () => {
     },
     yaxis: [
       {
-        title: { text: 'Price Asset', style: { color: '#f28482' } },
-        labels: { style: { colors: '#f28482' } },
+        title: { text: 'Price Asset'},
       },
       {
         opposite: true,
-        title: { text: 'Price Liability', style: { color: '#344e41' } },
-        labels: { style: { colors: '#344e41' } },
+        title: { text: 'Price Liability'},
       },
     ],
     colors: ['#f28482', '#344e41'], 
@@ -88,6 +93,9 @@ const PriceAssetVsPriceLiabilityGraph = () => {
       shared: true,
       intersect: false,
     },
+    dataLabels: {
+      enabled: false,
+    },
   };
 
   const series = [
@@ -96,24 +104,64 @@ const PriceAssetVsPriceLiabilityGraph = () => {
   ];
 
   return (
-    <div style={{ padding: '16px', width: '100%' }}>
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-        <h4>Price Asset vs. Price Liability</h4>
-        <FormControl style={{ width: '200px' }}>
-          <InputLabel>Filter By</InputLabel>
-          <Select value={filter} onChange={(e) => setFilter(e.target.value)}>
+    <div style={{ 
+      width: '100%', 
+      borderColor: '#eceff1', 
+      borderWidth: '1px',
+      borderRadius: '8px',
+      boxShadow: isHovered ? "0px 4px 8px rgba(0, 0, 0, 0.2)" : "none",
+      transition: "box-shadow 0.3s ease",
+      backgroundColor: 'white'
+    }}
+    onMouseEnter={() => setIsHovered(true)}
+    onMouseLeave={() => setIsHovered(false)}
+    >
+      <h3 style={{ margin:'14px', padding: "8px", fontSize: '18px', fontWeight: 'bold', color: '#364152'}}>Price Asset vs. Price Liability</h3>
+      
+      <Divider style={{ marginBottom: '16px', backgroundColor: '#eceff1', width: '100%' }} />
+      
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding:'0 16px'}}>
+        {!isSmallScreen && (
+          <Stack spacing={1} direction="row">
+            <Chip label="Price Asset" sx={{ backgroundColor: '#f28482', color: 'black' }} />
+            <Chip label="Price Liability" sx={{ backgroundColor: '#344e41', color: 'white' }} />
+          </Stack>
+        )}
+        <FormControl style={{ width: isSmallScreen ? '100%' : '200px'}}
+          sx={{
+            '.MuiOutlinedInput-root': {
+                borderRadius: '8px', 
+                backgroundColor: '#f8fafc', 
+            '& fieldset': {
+                borderColor: '#d3d3d3', 
+            },
+            '&:hover fieldset': {
+                borderColor: '#a3a3a3', 
+            },
+            '&.Mui-focused fieldset': {
+                borderColor: '#5a5a5a', 
+                borderWidth: '2px', 
+            },
+            },
+            '.MuiSelect-select': {
+                padding: '10px 16px', 
+                fontSize: '16px', 
+                color: '#333',
+            },
+          }}>
+          <Select value={filter} onChange={(e) => setFilter(e.target.value)} displayEmpty inputProps={{ 'aria-label': 'Filter By'}}>
+            <MenuItem value="">No Data Selected</MenuItem>
             <MenuItem value="this_month">This Month</MenuItem>
             <MenuItem value="last_month">Last Month</MenuItem>
             <MenuItem value="last_90_days">Last 90 Days</MenuItem>
           </Select>
         </FormControl>
       </div>
-      <Divider sx={{ my: 2, boxShadow: '0 1px 2px rgba(0, 0, 0, 0.1)' }} />
-      <Stack spacing={1} direction="row" sx={{ mb: 2 }}>
-        <Chip label="Price Asset" sx={{ backgroundColor: '#f28482', color: 'black' }} />
-        <Chip label="Price Liability" sx={{ backgroundColor: '#344e41', color: 'white' }} />
-      </Stack>
-      <Chart options={options} series={series} type="bar" height={500} />
+
+      <div style={{ padding: '16px'}}>
+        <Divider style={{ marginBottom: '16px', backgroundColor: '#eceff1', boxShadow: '0px 2px 4px rgba(0, 0, 0, 0.2)' }} />
+        <Chart options={options} series={series} type="bar" height={500} />
+      </div>
     </div>
   )
 }

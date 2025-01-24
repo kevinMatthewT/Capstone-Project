@@ -26,7 +26,7 @@ const MenuItem = [
         children: [
             { id: 'analytics-1', name: 'Actual Graphs', href: '/analytics/actual-graphs' },
             { id: 'analytics-2', name: 'Prediction Graphs', href: '/analytics/pred-graphs' },
-            { id: 'analytics-3', name: 'Comparison', href: '/analytics/comparison' },
+            // { id: 'analytics-3', name: 'Comparison', href: '/analytics/comparison' },
         ],
     },
     { 

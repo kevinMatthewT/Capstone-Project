@@ -2,7 +2,7 @@ import axios from 'axios';
 import React, { useEffect, useState } from 'react'
 import Chart from "react-apexcharts";
 import { format, subMonths, subDays, startOfMonth, endOfMonth } from 'date-fns';
-import { Stack, Chip, Select, MenuItem, FormControl, InputLabel, Divider} from '@mui/material';
+import { Stack, Chip, Select, MenuItem, FormControl, useMediaQuery, Divider} from '@mui/material';
 
 const YearOfOperationVsRevenueGraph = () => {
 
@@ -11,10 +11,17 @@ const YearOfOperationVsRevenueGraph = () => {
     revenue: [],
   });
 
-  const [filter, setFilter] = useState('this_month');
+  const [filter, setFilter] = useState('');
+  const [isHovered, setIsHovered] = useState(false);
+  const isSmallScreen = useMediaQuery('(max-width: 720px)');
 
   useEffect(() => {
     const fetchData = async () => {
+
+      if (!filter) {
+        setChartData({ categories: [], revenueData: []})
+      }
+
       let startDate, endDate;
 
       switch (filter) {
@@ -40,8 +47,8 @@ const YearOfOperationVsRevenueGraph = () => {
         );
         const data = response.data;
 
-        const categories = data.map(item => item.Year_Of_Operation); // X-axis: Year of Operation
-        const revenueData = data.map(item => item.Revenue); // Y-axis: Revenue
+        const categories = data.map(item => item.Year_Of_Operation); 
+        const revenueData = data.map(item => item.Revenue); 
 
         setChartData({ categories, revenueData });
       } catch (error) {
@@ -71,7 +78,6 @@ const YearOfOperationVsRevenueGraph = () => {
       title: { text: 'Revenue (IDR)' },
       labels: {
         style: {
-          colors: '#2500E3',
           fontSize: '12px',
         },
       },
@@ -89,7 +95,7 @@ const YearOfOperationVsRevenueGraph = () => {
       shared: true,
       intersect: false,
       y: {
-          formatter: value => `IDR ${value.toLocaleString()}`, // Formatting tooltip value
+          formatter: value => `IDR ${value.toLocaleString()}`,
         },
       },
   };
@@ -102,21 +108,67 @@ const YearOfOperationVsRevenueGraph = () => {
   ];
 
   return (
-    <div style={{ padding: '16px', width: '100%' }}>
-      <h4>Year of Operation vs. Revenue</h4>
-        <FormControl style={{ marginBottom: '16px', width: '200px', float: 'right' }}>
-          <InputLabel>Filter By</InputLabel>
-          <Select value={filter} onChange={(e) => setFilter(e.target.value)}>
-            <MenuItem value="this_month">This Month</MenuItem>
-            <MenuItem value="last_month">Last Month</MenuItem>
-            <MenuItem value="last_90_days">Last 90 Days</MenuItem>
-          </Select>
-        </FormControl>
-        <Divider style={{ margin: '16px 0', boxShadow: '0px 1px 4px rgba(0,0,0,0.1)' }} />
-        <Stack spacing={1} direction="row" style={{ marginBottom: '16px' }}>
-          <Chip label="Revenue" sx={{ backgroundColor: '#00E396', color: 'white' }} />
-        </Stack>
-        <Chart options={options} series={series} type="line" height={400} />
+    <div style={{
+      width: '100%', 
+      borderColor: '#eceff1', 
+      borderWidth: '1px',
+      borderRadius: '8px',
+      boxShadow: isHovered ? "0px 4px 8px rgba(0, 0, 0, 0.2)" : "none",
+      transition: "box-shadow 0.3s ease",
+      backgroundColor: 'white'
+    }}
+    onMouseEnter={() => setIsHovered(true)}
+    onMouseLeave={() => setIsHovered(false)}
+    >
+
+      <h3 style={{ margin:'14px', padding: "8px", fontSize: '18px', fontWeight: 'bold', color: '#364152'}}>Year of Operation vs. Revenue</h3>
+
+      <Divider style={{ marginBottom: '16px', backgroundColor: '#eceff1', width: '100%' }} />
+      
+      <div style={{display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding:'0px 16px'}}>
+        
+        {!isSmallScreen &&(
+          <Stack spacing={1} direction="row" >
+            <Chip label="Revenue" sx={{ backgroundColor: '#00E396', color: 'black' }} />
+          </Stack>
+        )}
+          <FormControl style={{ width: isSmallScreen ? '100%' : '200px' }}
+            sx={{
+              '.MuiOutlinedInput-root': {
+                  borderRadius: '8px', 
+                  backgroundColor: '#f8fafc', 
+              '& fieldset': {
+                  borderColor: '#d3d3d3', 
+              },
+              '&:hover fieldset': {
+                  borderColor: '#a3a3a3', 
+              },
+              '&.Mui-focused fieldset': {
+                  borderColor: '#5a5a5a', 
+                  borderWidth: '2px', 
+              },
+              },
+              '.MuiSelect-select': {
+                  padding: '10px 16px', 
+                  fontSize: '16px', 
+                  color: '#333',
+              },
+          }}>
+            <Select value={filter} onChange={(e) => setFilter(e.target.value)} displayEmpty inputProps={{'aria-label': 'Filter By'}}>
+              <MenuItem value="">No Data Selected</MenuItem>
+              <MenuItem value="this_month">This Month</MenuItem>
+              <MenuItem value="last_month">Last Month</MenuItem>
+              <MenuItem value="last_90_days">Last 90 Days</MenuItem>
+            </Select>
+          </FormControl>
+        </div>
+
+        <div style={{padding: '16px'}}>
+        
+          <Divider style={{ marginBottom: '16px', backgroundColor: '#eceff1', boxShadow: '0px 2px 4px rgba(0, 0, 0, 0.2)' }} />
+
+          <Chart options={options} series={series} type="line" height={400} />
+        </div>     
     </div>
   )
 }

@@ -10,6 +10,7 @@
     "@mui/material": "^6.4.1",
     "@mui/styled-engine-sc": "^6.1.5",
     "@mui/x-data-grid": "^7.20.0",
+    "@mui/x-tree-view": "^7.23.2",
     "@nivo/bar": "^0.87.0",
     "@nivo/core": "^0.87.0",
     "@nivo/geo": "^0.87.0",
