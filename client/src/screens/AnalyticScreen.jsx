@@ -7,44 +7,44 @@ import { useAuthState } from 'react-firebase-hooks/auth';
 import { auth } from '../Firebase';
 
 function AnalyticScreen() {
-  const [isSidebarOpen, setIsSidebarOpen] = useState(true);
-  const [user, loading, error] = useAuthState(auth);
+    const [isSidebarOpen, setIsSidebarOpen] = useState(true);
+    const [user, loading, error] = useAuthState(auth);
 
-  useEffect(() => {
-    if (!loading && !user) {
-        loginChecker();
-    }
-  }, [user, loading]);
+    useEffect(() => {
+        if (!loading && !user) {
+            loginChecker();
+        }
+    }, [user, loading]);
   
-  const navigate = useNavigate("");
+    const navigate = useNavigate("");
 
-  const loginChecker= async()=>{
-    alert("you do not have access for this page")
-    try {
-      navigate('/');
-    }catch(err){
+    const loginChecker= async()=>{
+        alert("you do not have access for this page")
+        try {
+        navigate('/');
+        }catch(err){
 
+        }
     }
-  }
 
-  if(user){
-  return (
-    <div className='flex min-h-screen h-auto'>
-      {/* Sidebar */}
-      <Sidebar isSidebarOpen={isSidebarOpen} setIsSidebarOpen={setIsSidebarOpen} />
-        
-        {/* Topbar */}
-        <div className='flex-1 flex flex-col'>
-          <Topbar isSidebarOpen={isSidebarOpen}/>
+    if(user){
+    return (
+        <div className='flex min-h-screen h-auto'>
+        {/* Sidebar */}
+        <Sidebar isSidebarOpen={isSidebarOpen} setIsSidebarOpen={setIsSidebarOpen} />
             
-            {/* Main Content */}
-            <div className='px-8 py-4 flex-1 overflow-y-auto bg-[#eef2f6] rounded-lg'>
-              <HeaderTitle title='Analytics' isSidebarOpen={isSidebarOpen} />
-            </div>
+            {/* Topbar */}
+            <div className='flex-1 flex flex-col'>
+            <Topbar isSidebarOpen={isSidebarOpen}/>
+                
+                {/* Main Content */}
+                <div className='px-8 py-4 flex-1 overflow-y-auto bg-[#eef2f6] rounded-lg'>
+                <HeaderTitle title='Analytics' isSidebarOpen={isSidebarOpen} />
+                </div>
 
+            </div>
         </div>
-    </div>
-  )}
+    )}
 }
 
 export default AnalyticScreen

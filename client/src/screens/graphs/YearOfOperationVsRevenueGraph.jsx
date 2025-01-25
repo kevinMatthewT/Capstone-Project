@@ -26,16 +26,16 @@ const YearOfOperationVsRevenueGraph = () => {
 
       switch (filter) {
         case 'this_month':
-          startDate = format(startOfMonth(new Date()), 'yyyy-MM-dd');
-          endDate = format(endOfMonth(new Date()), 'yyyy-MM-dd');
+          startDate = format(startOfMonth(new Date()), 'dd-MM-yyyy');
+          endDate = format(endOfMonth(new Date()), 'dd-MM-yyyy');
           break;
         case 'last_month':
-          startDate = format(startOfMonth(subMonths(new Date(), 1)), 'yyyy-MM-dd');
-          endDate = format(endOfMonth(subMonths(new Date(), 1)), 'yyyy-MM-dd');
+          startDate = format(startOfMonth(subMonths(new Date(), 1)), 'dd-MM-yyyy');
+          endDate = format(endOfMonth(subMonths(new Date(), 1)), 'dd-MM-yyyy');
           break;
         case 'last_90_days':
-          startDate = format(subDays(new Date(), 90), 'yyyy-MM-dd');
-          endDate = format(new Date(), 'yyyy-MM-dd');
+          startDate = format(subDays(new Date(), 90), 'dd-MM-yyyy');
+          endDate = format(new Date(), 'dd-MM-yyyy');
           break;
         default:
           return;

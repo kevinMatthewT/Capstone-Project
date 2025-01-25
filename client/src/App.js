@@ -22,11 +22,10 @@ function App() {
         <Route path='/' element={<LoginScreen/>}/>
         <Route path='/dashboard' element={<HomeScreen/>}/>
         <Route path='/resetpass' element={<ResetPassScreen/>}/>
-        <Route path='/analytics' element={<AnalyticScreen/>}/>
         <Route path='/investments' element={<InvestorScreen/>}/>
         <Route path='/investments/form' element={<InvestorForm/>}/>
-        <Route path='/analytics/actual-graphs' element={<ActualGraphScreen/>}/>
-        <Route path='/analytics/pred-graphs' element={<PredGraphScreen/>}/>
+        <Route path='/actual-graphs' element={<ActualGraphScreen/>}/>
+        <Route path='/pred-graphs' element={<PredGraphScreen/>}/>
         <Route path='/analytics/comparison' element={<ComparisonScreen/>}/>
         <Route path='/investments/update/:id' element={<UpdateInvestor/>}/>
         <Route path='/graph' element={<RevenueVsExpanseGraph/>}/>

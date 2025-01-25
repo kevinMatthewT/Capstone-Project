@@ -6,7 +6,7 @@ const containerStyle = (isSidebarOpen) => ({
 
 const HeaderTitle = ({ title, isSidebarOpen }) => {
     return (
-        <header className="bg-white bg-opacity-50 backdrop-blur-md border-b border-gray-300 shadow-md rounded-lg transition-all duration-300"
+        <header className="bg-white backdrop-blur-md border-b border-gray-300 shadow-md rounded-lg transition-all duration-300"
         style={{
             ...containerStyle(isSidebarOpen),
             position: 'relative', // Ensures it’s within the stacking context

@@ -24,8 +24,8 @@ const MenuItem = [
         href: '/analytics',
         section: 'Dashboard',
         children: [
-            { id: 'analytics-1', name: 'Actual Graphs', href: '/analytics/actual-graphs' },
-            { id: 'analytics-2', name: 'Prediction Graphs', href: '/analytics/pred-graphs' },
+            { id: 'analytics-1', name: 'Actual Graphs', href: '/actual-graphs' },
+            { id: 'analytics-2', name: 'Prediction Graphs', href: '/pred-graphs' },
             // { id: 'analytics-3', name: 'Comparison', href: '/analytics/comparison' },
         ],
     },
