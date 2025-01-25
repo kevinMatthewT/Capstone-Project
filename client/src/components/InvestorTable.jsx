@@ -7,12 +7,13 @@ import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
 import SaveIcon from '@mui/icons-material/Save';
 import IconButton from '@mui/material/IconButton'
+import {Box} from '@mui/material'
 
 // import './styles/InvestorTable.css';
 
 function CustomToolbar() {
   return (
-    <GridToolbarContainer style={{ padding: '8px', backgroundColor: '#f9f9f9' }}>
+    <GridToolbarContainer style={{ padding: '8px', backgroundColor: '#f9f9f9', height: '50px', display: 'flex', justifyContent: 'space-between' }}>
     <GridToolbarExport />
     <GridToolbarColumnsButton />
     <GridToolbarFilterButton />
@@ -132,27 +133,24 @@ function InvestorTable({isSidebarOpen}) {
     }));
 
     return (
-    <div style={{ ...containerStyle(isSidebarOpen),
-      paddingTop: '16px'}}>
+      <Box sx={{ ...containerStyle(isSidebarOpen), paddingTop: '16px' }}>
       <DataGrid
         rows={rows}
         columns={columns}
         pageSize={10}
-        rowsPerPageOptions={[10, 15, 25]}
-        components= {{Toolbar:CustomToolbar}}
+        rowsPerPageOptions={[25, 50, 100]}
+        components={{ Toolbar: CustomToolbar }}
         sx={{
           width: '100%',
           height: '500px',
           borderRadius: '8px',
           boxShadow: '0px 4px 12px rgba(0, 0, 0, 0.1)',
           overflow: 'hidden',
-
-          // Custom styling for DataGrid components
           '& .MuiDataGrid-root': {
             border: "none",
           },
           '& .MuiDataGrid-toolbarContainer': {
-            backgroundColor: '#f0f0f0', 
+            backgroundColor: '#f0f0f0',
           },
           '& .MuiDataGrid-columnHeaders': {
             backgroundColor: 'blue',
@@ -172,7 +170,7 @@ function InvestorTable({isSidebarOpen}) {
           },
         }}
       />
-    </div>
+    </Box>
   )
 }
 

@@ -77,7 +77,7 @@ function PredGraphScreen() {
     
     if(user){
     return (
-        <div className=' flexmin-h-screen h-auto' style={{overflowX: 'hidden'}}>
+        <div className=' flex min-h-screen h-auto' style={{overflowX: 'hidden'}}>
         {/* Sidebar */}
         <Sidebar isSidebarOpen={isSidebarOpen} setIsSidebarOpen={setIsSidebarOpen} />
             
@@ -125,6 +125,11 @@ function PredGraphScreen() {
                                             },
                                         }
                                     }}
+                                    style={{
+                                        backgroundColor: "#f7f9fc",
+                                            borderRadius: "8px",
+                                    }}
+                                    required
                                 />
                             </Grid>
 
@@ -146,6 +151,11 @@ function PredGraphScreen() {
                                             },
                                         }
                                     }}
+                                    style={{
+                                        backgroundColor: "#f7f9fc",
+                                            borderRadius: "8px",
+                                    }}
+                                    required
                                 />
                             </Grid>
 
@@ -167,6 +177,11 @@ function PredGraphScreen() {
                                             },
                                         }
                                     }}
+                                    style={{
+                                        backgroundColor: "#f7f9fc",
+                                            borderRadius: "8px",
+                                    }}
+                                    required
                                 />
                             </Grid>
                         </Grid>

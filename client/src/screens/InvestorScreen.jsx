@@ -33,7 +33,7 @@ function InvestorScreen() {
   if (user){
   return (
     <>
-    <div className=' min-h-screen h-auto'>
+    <div className=' min-h-screen h-auto overflow-x-hidden'>
       {/* Sidebar */}
       <Sidebar isSidebarOpen={isSidebarOpen} setIsSidebarOpen={setIsSidebarOpen} />
         
@@ -44,7 +44,7 @@ function InvestorScreen() {
             {/* Main Content */}
             <div className='px-8 py-4 flex-1 overflow-y-auto bg-[#eef2f6] rounded-lg'>
               <HeaderTitle title='Investment' isSidebarOpen={isSidebarOpen}/>
-              <InvestorTable name="editor" isSidebarOpen={isSidebarOpen} />
+              <InvestorTable isSidebarOpen={isSidebarOpen} />
             </div>
         </div>
     </div> 

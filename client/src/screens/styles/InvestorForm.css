@@ -1,21 +1,25 @@
-.form-container{
-    border: solid;
-    width: 84%;
-    position: absolute;
-    margin-left: 15.2%;
-    margin-top: 5%;
-    height: 87vh;
-}
+.custom-textfield .MuiOutlinedInput-root {
+    height: 45px;
+    font-size: 14px;
+    border-radius: 12px;
+    background-color: #f7f9fc;
+  }
+  
+  .custom-textfield .MuiOutlinedInput-root fieldset {
+    border-radius: 12px;
+  }
+  
+  .custom-textfield .MuiOutlinedInput-root:hover fieldset {
+    border-color: #4b5565;
+  }
+  
+  .custom-textfield .MuiOutlinedInput-root.Mui-focused fieldset {
+    border-color: #4b5565;
+  }
 
-.form-box{
-    position: relative;
-    width: 40%;
-    left: 30%;
-    top: 40px;
-}
-
-.form-field-name{
-    font-size: 20px;
-    padding-top: 10px;
-    padding-bottom: 10px;
-}
+  .custom-typography {
+    font-size: 14px;
+    font-weight: 600;
+    color: #4b5565;
+  }
+  
