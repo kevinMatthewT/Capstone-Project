@@ -8,7 +8,7 @@ const YearOfOperationVsEBIDAGraph = () => {
 
     const [chartData, setChartData] = useState({
         categories: [],
-        ebida: [],
+        ebidaData: [],
     });
     
     const [filter, setFilter] = useState('');
@@ -22,34 +22,19 @@ const YearOfOperationVsEBIDAGraph = () => {
                 setChartData({ categories: [], ebidaData: []})
             }
             
-            let startDate, endDate;
-    
-            switch (filter) {
-            case 'this_month':
-                startDate = format(startOfMonth(new Date()), 'dd-MM-yyyy');
-                endDate = format(endOfMonth(new Date()), 'dd-MM-yyyy');
-            break;
-            case 'last_month':
-                startDate = format(startOfMonth(subMonths(new Date(), 1)), 'dd-MM-yyyy');
-                endDate = format(endOfMonth(subMonths(new Date(), 1)), 'dd-MM-yyyy');
-            break;
-            case 'last_90_days':
-                startDate = format(subDays(new Date(), 90), 'dd-MM-yyyy');
-                endDate = format(new Date(), 'dd-MM-yyyy');
-            break;
-            default:
-            return;
-        }
-    
         try {
             const response = await axios.get(
-                `http://localhost:8080/api/get/investment?start=${startDate}&end=${endDate}`
+                `http://localhost:8080/api/get/investment/filter/${filter}`
             );
             const data = response.data;
     
             const categories = data.map(item => item.Year_Of_Operation);
-            const ebidaData = data.map(item => ({ x: item.Year_Of_Operation, y: item.Ebida }));
-    
+            const ebidaData = data.map(item => ({
+                x: item.Year_Of_Operation,
+                y: item.Ebida,
+                company: item.Company, 
+            }));
+
             setChartData({ categories, ebidaData });
         } catch (error) {
             console.error(error);
@@ -96,9 +81,15 @@ const YearOfOperationVsEBIDAGraph = () => {
         tooltip: {
             shared: false,
             intersect: true,
-            x: { show: true },
-            y: {
-              formatter: value => `IDR ${value.toLocaleString()}`, // Formatting tooltip value
+            custom: ({ series, seriesIndex, dataPointIndex, w }) => {
+                const pointData = w.globals.initialSeries[seriesIndex].data[dataPointIndex];
+                return `
+                    <div style="padding:10px;">
+                        <strong>${pointData.company}</strong><br/>
+                        Year: ${pointData.x}<br/>
+                        EBIDA: IDR ${pointData.y.toLocaleString()}
+                    </div>
+                `;
             },
         },
     };

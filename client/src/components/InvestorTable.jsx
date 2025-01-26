@@ -7,29 +7,72 @@ import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
 import SaveIcon from '@mui/icons-material/Save';
 import IconButton from '@mui/material/IconButton'
-import {Box} from '@mui/material'
+import {Box, Button, Divider} from '@mui/material'
 
-// import './styles/InvestorTable.css';
+import './styles/InvestorTable.css';
 
-function CustomToolbar() {
-  return (
-    <GridToolbarContainer style={{ padding: '8px', backgroundColor: '#f9f9f9', height: '50px', display: 'flex', justifyContent: 'space-between' }}>
-    <GridToolbarExport />
-    <GridToolbarColumnsButton />
-    <GridToolbarFilterButton />
-    <GridToolbarQuickFilter
-      quickFilterParser={(input) => input.split(',')}
-      quickFilterFormatter={(values) => values.join(',')}
-    />
-  </GridToolbarContainer>
-  );
-}
 
 const containerStyle = (isSidebarOpen) => ({
   width: `calc(100% - ${isSidebarOpen ? '256px' : '80px'})`,
   marginLeft: isSidebarOpen ? '256px' : '80px',
   transition: 'width 0.3s ease, margin-left 0.3s ease',
 });
+
+function CustomToolbar() {
+  return (
+    <GridToolbarContainer style={{  marginBottom:'16px', padding: '14px', backgroundColor: 'white', display: 'flex', justifyContent: 'space-between', alignItems: 'center',}}>
+    
+      <Button
+        variant="contained"
+        className='grid-button'
+      >
+        <Box className='grid-button-box'>
+          <GridToolbarExport />
+        </Box>
+      </Button>
+
+      <Button
+        variant="contained"
+        className='grid-button'
+      >
+        <Box className='grid-button-box'>
+          <GridToolbarColumnsButton />
+        </Box>
+      </Button>
+
+      <Button
+        variant="contained"
+        className='grid-button'
+      >
+        <Box className='grid-button-box'>
+          <GridToolbarFilterButton />
+        </Box>
+      </Button>
+
+    
+    <GridToolbarQuickFilter
+      sx={{ marginLeft: 'auto', width: '200px',
+        '& .MuiInputBase-root': {
+            borderRadius: '8px',
+            backgroundColor: '#fff',
+            border: '2px solid',
+            borderColor: '#eef2f6',
+            padding: '4px 12px',
+            '&:hover': {
+              backgroundColor: '#eef2f6',
+            },
+          },
+        '& .MuiInputBase-input': {
+          fontSize: '12px',
+          
+        },
+      }}
+      quickFilterParser={(input) => input.split(',')}
+      quickFilterFormatter={(values) => values.join(',')}
+    />
+  </GridToolbarContainer>
+  );
+}
 
 function InvestorTable({isSidebarOpen}) {
     const [investments, setInvestment] = useState([]);
@@ -45,7 +88,10 @@ function InvestorTable({isSidebarOpen}) {
             : `http://localhost:8080/api/get/investment/${Filter}/filter${FilterValue}`;
 
         axios.get(url)
-            .then(res => setInvestment(res.data))
+            .then(res => {
+              console.log(res.data);
+              setInvestment(res.data);
+            })
         .catch(err => console.log(err));
     }, [Filter, FilterValue]);
 
@@ -54,7 +100,6 @@ function InvestorTable({isSidebarOpen}) {
         .then(res=>console.log(res.data))
         .catch(err=>console.log(err));
     }
-
 
     const handleSubmit = async (e)=> {
         const url = `http://localhost:8080/api/get/investment/${Filter}/filter${FilterValue}`;
@@ -80,8 +125,12 @@ function InvestorTable({isSidebarOpen}) {
         { field: 'Year_Of_Operation', headerName: 'Year of Operation', width: 175},
         { field: 'Business', headerName: 'Business', width: 175},
         { field: 'Percentage_Ownership', headerName: 'Percentage Ownership', width: 175},
-        { field: 'Revenue', headerName: 'Revenue', width: 175},
-        { field: 'Expense', headerName: 'Expense', width: 175},
+        { field: 'Revenue', headerName: 'Revenue', width: 175,
+          
+        },
+        { field: 'Expense', headerName: 'Expense', width: 175,
+    
+        },
         { field: 'Ebida', headerName: 'Ebida', width: 175},
         { field: 'Tax_Investment', headerName: 'Tax Investment', width: 175},
         { field: 'Price_Asset', headerName: 'Price Asset', width: 175},
@@ -100,10 +149,10 @@ function InvestorTable({isSidebarOpen}) {
             width: 125,
             renderCell: (params) => (
             <div>
-                <IconButton sx={{ color: '#009688' }} onClick={() => navigate(`/investments/update/${params.id}`)}>
+                <IconButton sx={{ color: '#009688', paddingBottom: '24px'}} onClick={() => navigate(`/investments/update/${params.id}`)}>
                   <EditIcon />
                 </IconButton>
-                <IconButton sx={{ color: '#d9534f' }} onClick={() => deleteData(params.id)}>
+                <IconButton sx={{ color: '#d9534f', paddingBottom: '24px'}} onClick={() => deleteData(params.id)}>
                   <DeleteIcon />
                 </IconButton>
             </div>
@@ -133,43 +182,45 @@ function InvestorTable({isSidebarOpen}) {
     }));
 
     return (
-      <Box sx={{ ...containerStyle(isSidebarOpen), paddingTop: '16px' }}>
-      <DataGrid
-        rows={rows}
-        columns={columns}
-        pageSize={10}
-        rowsPerPageOptions={[25, 50, 100]}
-        components={{ Toolbar: CustomToolbar }}
-        sx={{
-          width: '100%',
-          height: '500px',
-          borderRadius: '8px',
-          boxShadow: '0px 4px 12px rgba(0, 0, 0, 0.1)',
-          overflow: 'hidden',
-          '& .MuiDataGrid-root': {
-            border: "none",
-          },
-          '& .MuiDataGrid-toolbarContainer': {
-            backgroundColor: '#f0f0f0',
-          },
-          '& .MuiDataGrid-columnHeaders': {
-            backgroundColor: 'blue',
-            fontWeight: 'bold',
-            borderBottom: '1px solid black',
-          },
-          '& .MuiDataGrid-cell': {
-            borderBottom: 'none',
-            padding: '15px',
-          },
-          '& .MuiDataGrid-virtualScroller': {
-            overflowX: 'auto',
-          },
-          '& .MuiDataGrid-footerContainer': {
-            borderTop: "none",
-            backgroundColor: 'gray',
-          },
-        }}
-      />
+      <Box sx={{
+      ...containerStyle(isSidebarOpen), 
+      backgroundColor: 'white',
+      boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)', 
+      borderRadius: 2, 
+      mt: 2,
+      p: 2
+      }}>
+        
+        <Box sx={{ marginBottom: 2,}}>
+          <h2 style={{ marginLeft:'16px' ,marginBottom:'4px', fontSize: '20px', fontWeight: 'bold', color: 'black'}}>Investment Data Grid</h2>
+          <h4 style={{ marginLeft:'16px', marginBottom: '16px', fontSize: '14px', color: '#4b5565'}}> All investment data is being displayed in the data grid</h4>
+
+          <Divider style={{ marginBottom: '1rem', backgroundColor: '#eef2f6',}} />
+
+          <DataGrid
+            rows={rows}
+            columns={columns}
+            slots={{ toolbar: CustomToolbar }}
+            sx={{
+              width: '100%',
+              height: '500px',
+              overflow: 'hidden',
+              border:'1px solid white',
+              '& .MuiDataGrid-columnHeaders': {
+                color: '#364152',
+                borderTop: '2px solid #364152',
+                borderBottom: '2px solid #364152',
+              },
+              '& .MuiDataGrid-virtualScroller::-webkit-scrollbar': {
+                display: 'none',
+              },
+              '& .MuiDataGrid-footerContainer': {
+                borderTop: "1px solid #eef2f6",
+                backgroundColor: 'white',
+              },
+            }}
+          />
+        </Box>
     </Box>
   )
 }

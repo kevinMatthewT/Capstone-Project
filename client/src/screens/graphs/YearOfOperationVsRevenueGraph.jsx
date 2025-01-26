@@ -9,6 +9,7 @@ const YearOfOperationVsRevenueGraph = () => {
   const [chartData, setChartData] = useState({
     categories: [],
     revenue: [],
+    company: [],
   });
 
   const [filter, setFilter] = useState('');
@@ -22,35 +23,17 @@ const YearOfOperationVsRevenueGraph = () => {
         setChartData({ categories: [], revenueData: []})
       }
 
-      let startDate, endDate;
-
-      switch (filter) {
-        case 'this_month':
-          startDate = format(startOfMonth(new Date()), 'dd-MM-yyyy');
-          endDate = format(endOfMonth(new Date()), 'dd-MM-yyyy');
-          break;
-        case 'last_month':
-          startDate = format(startOfMonth(subMonths(new Date(), 1)), 'dd-MM-yyyy');
-          endDate = format(endOfMonth(subMonths(new Date(), 1)), 'dd-MM-yyyy');
-          break;
-        case 'last_90_days':
-          startDate = format(subDays(new Date(), 90), 'dd-MM-yyyy');
-          endDate = format(new Date(), 'dd-MM-yyyy');
-          break;
-        default:
-          return;
-      }
-
       try {
         const response = await axios.get(
-          `http://localhost:8080/api/get/investment?start=${startDate}&end=${endDate}`
+          `http://localhost:8080/api/get/investment/filter/${filter}`
         );
         const data = response.data;
 
         const categories = data.map(item => item.Year_Of_Operation); 
         const revenueData = data.map(item => item.Revenue); 
+        const companyData = data.map(item => item.Company);
 
-        setChartData({ categories, revenueData });
+        setChartData({ categories, revenueData, companyData });
       } catch (error) {
         console.error(error);
       }
@@ -94,10 +77,24 @@ const YearOfOperationVsRevenueGraph = () => {
     tooltip: {
       shared: true,
       intersect: false,
-      y: {
-          formatter: value => `IDR ${value.toLocaleString()}`,
-        },
+      custom: ({ series, seriesIndex, dataPointIndex, w }) => {
+        const dataPoint = w.globals.initialSeries[seriesIndex].data[dataPointIndex];
+        const year = chartData.categories[dataPointIndex];
+        const company = chartData.companyData[dataPointIndex]; 
+        const revenue = dataPoint;
+
+        return `
+          <div style="padding: 10px; font-size: 14px;">
+            <strong>Company: ${company}</strong><br/>
+            <strong>Year: ${year}<br/>
+            Revenue: IDR ${revenue.toLocaleString()}
+          </div>
+        `;
       },
+      y: {
+        formatter: value => `IDR ${value.toLocaleString()}`,
+      },
+    },
   };
 
   const series = [

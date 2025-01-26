@@ -8,6 +8,7 @@ const PercentageOwnershipVsEquityGraph = () => {
   const [chartData, setChartData] = useState({
     ownershipData: [],
     equityData: [],
+    companyData: [],
   });
 
   const [filter, setFilter] = useState("");
@@ -16,39 +17,23 @@ const PercentageOwnershipVsEquityGraph = () => {
 
   useEffect(() => {
     const fetchData = async () => {
-      let startDate, endDate;
 
       if (!filter) {
-        setChartData({ ownershipData: [], equityData: []})
-      }
-
-      switch (filter) {
-        case "this_month":
-          startDate = format(startOfMonth(new Date()), "dd-MM-yyyy");
-          endDate = format(endOfMonth(new Date()), "dd-MM-yyyy");
-          break;
-        case "last_month":
-          startDate = format(startOfMonth(subMonths(new Date(), 1)), "dd-MM-yyyy");
-          endDate = format(endOfMonth(subMonths(new Date(), 1)), "dd-MM-yyyy");
-          break;
-        case "last_90_days":
-          startDate = format(subDays(new Date(), 90), "dd-MM-yyyy");
-          endDate = format(new Date(), "dd-MM-yyyy");
-          break;
-        default:
-          return;
+        setChartData({ ownershipData: [], equityData: [], companyData: []})
       }
 
       try {
         const response = await axios.get(
-          `http://localhost:8080/api/get/investment?start=${startDate}&end=${endDate}`
+          `http://localhost:8080/api/get/investment/filter/${filter}`
+
         );
         const data = response.data;
 
         const ownershipData = data.map((item) => item.Percentage_Ownership);
         const equityData = data.map((item) => item.Equity);
+        const companyData = data.map((item) => item.Company)
 
-        setChartData({ ownershipData, equityData });
+        setChartData({ ownershipData, equityData, companyData});
       } catch (error) {
         console.error(error);
       }
@@ -95,11 +80,16 @@ const PercentageOwnershipVsEquityGraph = () => {
     tooltip: {
       shared: false,
       intersect: true,
-      x: {
-        formatter: (val) => `${val} %`,
-      },
-      y: {
-        formatter: (val) => `IDR ${val.toLocaleString()}`,
+      custom: ({ series, seriesIndex, dataPointIndex, w }) => {
+        const company = w.globals.initialSeries[seriesIndex].data[dataPointIndex].company;
+        const ownership = w.globals.initialSeries[seriesIndex].data[dataPointIndex].x;
+        const equity = w.globals.initialSeries[seriesIndex].data[dataPointIndex].y;
+
+        return `<div style="padding:10px;">
+                  <strong>${company}</strong><br/>
+                  Ownership: ${ownership} %<br/>
+                  Equity: IDR ${equity.toLocaleString()}
+                </div>`;
       },
     },
   };
@@ -110,6 +100,7 @@ const PercentageOwnershipVsEquityGraph = () => {
       data: chartData.ownershipData.map((ownership, index) => ({
         x: ownership,
         y: chartData.equityData[index],
+        company: chartData.companyData[index],
       })),
     },
   ];

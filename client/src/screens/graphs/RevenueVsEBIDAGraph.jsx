@@ -16,37 +16,17 @@ const RevenueVsEBIDAGraph = () => {
         setChartData([])
       }
 
-      let startDate, endDate;
-
-      switch (filter) {
-        case 'this_month':
-          startDate = new Date(new Date().getFullYear(), new Date().getMonth(), 1).toISOString().split('T')[0];
-          endDate = new Date().toISOString().split('T')[0];
-        break;
-        case 'last_month':
-          const lastMonthStart = new Date(new Date().getFullYear(), new Date().getMonth() - 1, 1);
-          startDate = lastMonthStart.toISOString().split('T')[0];
-          endDate = new Date(lastMonthStart.getFullYear(), lastMonthStart.getMonth() + 1, 0).toISOString().split('T')[0];
-          break;
-        case 'last_90_days':
-          startDate = new Date(new Date().setDate(new Date().getDate() - 90)).toISOString().split('T')[0];
-          endDate = new Date().toISOString().split('T')[0];
-        break;
-        default:
-      return;
-      }
-
       try {
-        const response = await axios.get(`http://localhost:8080/api/get/investment?start=${startDate}&end=${endDate}`);
+        const response = await axios.get(`http://localhost:8080/api/get/investment/filter/${filter}`);
         const data = response.data;
 
         const formattedData = data
-        .filter(item => item.Revenue !== null && item.Ebida !== null) // Remove null/undefined values
-        .map(item => ({
-          x: item.Revenue,
-          y: item.Ebida,
-          company: item.Company,
-        }));
+          .filter(item => item.Revenue !== null && item.Ebida !== null) // Remove null/undefined values
+          .map(item => ({
+            x: item.Revenue,
+            y: item.Ebida,
+            company: item.Company,
+          }));
 
         setChartData(formattedData);
       } catch (error) {

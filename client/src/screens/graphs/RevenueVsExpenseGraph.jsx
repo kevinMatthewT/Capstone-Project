@@ -24,30 +24,9 @@ const RevenueVsExpenseGraph = () => {
                 setChartData({ categories: [], revenueData: [], expenseData: []})
             }
 
-            let startDate, endDate;
-
-            switch (filter) {
-                case 'this_month':
-                    startDate = format(startOfMonth(new Date()), 'dd-MM-yyyy');
-                    endDate = format(endOfMonth(new Date()), 'dd-MM-yyyy');
-                    break;
-                case 'last_month':
-                    startDate = format(startOfMonth(subMonths(new Date(), 1)), 'dd-MM-yyyy');
-                    endDate = format(endOfMonth(subMonths(new Date(), 1)), 'dd-MM-yyyy');
-                    break;
-                case 'last_90_days':
-                    startDate = format(subDays(new Date(), 90), 'dd-MM-yyyy');
-                    endDate = format(new Date(), 'dd-MM-yyyy');
-                    break;
-                default:
-                    return;
-            }
-        
-            console.log("Fetching data for:", { startDate, endDate });
-
             try {
                 const response = await axios.get(
-                    `http://localhost:8080/api/get/investment?start=${startDate}&end=${endDate}`
+                    `http://localhost:8080/api/get/investment/filter/${filter}`
                 );
 
                 console.log("API Response:", response.data);

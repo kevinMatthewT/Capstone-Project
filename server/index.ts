@@ -239,7 +239,8 @@ app.post("/api/post/investment/many", async(req:Request, res: Response, next:Nex
         }
 })
 
-app.get("/api/get/investment/forecast/:company/:investor/:domicile", async (req: Request, res: Response, next: NextFunction) => {
+app.get("/api/get/investment/forecast/:company/:investor/:domicile", 
+    async (req: Request, res: Response, next: NextFunction) => {
     try{
     const Company_Name = req.params.company ;
     const Company_Investor_Name = req.params.investor ;
@@ -275,8 +276,8 @@ app.get("/api/get/investment/forecast/:company/:investor/:domicile", async (req:
         });
     });
     } catch(error){
-        console.error("Unhandled error:", error.message);
-        res.status(500).json({ error: "Internal server error", details: error.message });
+        console.error("Unhandled error:", error);
+        res.status(500).json({ error: "Internal server error", details: error });
     }
 });
 

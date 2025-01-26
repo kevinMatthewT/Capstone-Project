@@ -12,38 +12,21 @@ const OwnershipVsEquityGraph = () => {
 
   useEffect(() => {
     const fetchData = async () => {
-      let startDate, endDate;
 
       if (!filter) {
         setChartData([])
       }
 
-      switch (filter) {
-        case 'this_month':
-          startDate = format(startOfMonth(new Date()), 'dd-MM-yyyy');
-          endDate = format(endOfMonth(new Date()), 'dd-MM-yyyy');
-          break;
-        case 'last_month':
-          startDate = format(startOfMonth(subMonths(new Date(), 1)), 'dd-MM-yyyy');
-          endDate = format(endOfMonth(subMonths(new Date(), 1)), 'dd-MM-yyyy');
-          break;
-        case 'last_90_days':
-          startDate = format(subDays(new Date(), 90), 'dd-MM-yyyy');
-          endDate = format(new Date(), 'dd-MM-yyyy');
-          break;
-        default:
-          return;
-      }
-
       try {
         const response = await axios.get(
-          `http://localhost:8080/api/get/investment?start=${startDate}&end=${endDate}`
+          `http://localhost:8080/api/get/investment/filter/${filter}`
         );
         const data = response.data;
 
         const equityData = data.map((item) => ({
           x: new Date(item.Date_Of_Ownership).toISOString(),
           y: item.Equity,
+          company: item.Company,
         }));
 
         setChartData(equityData);
@@ -84,10 +67,23 @@ const OwnershipVsEquityGraph = () => {
       strokeDashArray: 4,
     },
     tooltip: {
-      x: { format: 'dd MMM yyyy' },
-      y: {
-        formatter: (value) => `IDR ${value.toLocaleString()}`,
+      shared: false,
+      x: {
+        formatter: (val) => format(new Date(val), 'dd MMM yyyy'), // Format the date
       },
+      y: {
+        formatter: (val) => `IDR ${val.toLocaleString()}`, // Format the equity value
+      },
+      custom: ({ seriesIndex, dataPointIndex, w }) => {
+        const pointData = w.globals.initialSeries[seriesIndex].data[dataPointIndex]; // Get the data for the specific point
+        return `
+          <div style="padding:10px;">
+            <strong>${pointData.company}</strong><br/>
+            Date: ${format(new Date(pointData.x), 'dd MMM yyyy')}<br/>
+            Equity: IDR ${pointData.y.toLocaleString()}
+          </div>
+        `;
+      }
     },
   };
 
