@@ -122,25 +122,24 @@ app.get("/api/get/investment/Price_Asset/filter:filtername", (req, res, next) =>
         next(res.status(500).json({ error: "Investments not found" }));
     }
 }));
+
+// PLEASE DONT DELETE THIS AND THE ONE BELOW
+// vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv
 app.get("/api/get/investment/Date_Of_Ownership/filter/:filtername", async (req, res, next) => {
     try {
         const filtername = req.params.filtername;
 
-        // Parse date manually using JavaScript Date
-        const [day, month, year] = filtername.split("-"); // Assuming "DD-MM-YYYY" format
-        const filterDate = new Date(year, month - 1, day); // Month is 0-based
+        const [day, month, year] = filtername.split("-"); 
+        const filterDate = new Date(year, month - 1, day); 
 
-        // Debug logs
         console.log('Raw filtername:', filtername);
         console.log('Parsed filterDate:', filterDate);
         console.log('Is valid date?', !isNaN(filterDate));
 
-        // Check if the date is valid
         if (isNaN(filterDate)) {
             return res.status(400).json({ error: 'Invalid date format' });
         }
 
-        // Query MongoDB for documents with Date_Of_Ownership >= filterDate
         const allInvestments = await InvestorSchema_1.default.find({
             Date_Of_Ownership: { $gte: filterDate },
         });
@@ -179,6 +178,8 @@ app.get("/api/get/investment/filter/:filter", async (req, res) => {
 
     res.status(200).json(investments);
 });
+// UNTIL HERE
+
 app.get("/api/get/investment/:id", (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const uid = req.params.id;

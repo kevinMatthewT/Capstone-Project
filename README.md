@@ -64,16 +64,16 @@ When you enter the system, you will be greeted with the dashboard page where you
 
 in the investments page you can see all of the records that are in the database. You can sort the values by its order. On the right side of each row, you can edit or delete the data
 
-![alt text](screenshots/image-3.png)
-![alt text](screenshots/image-4.png)
+![alt text](screenshots/image-12.png)
+![alt text](screenshots/image-13.png)
 
 when clicking the update form, the user will be redirected to another page with the values of the previous results shown
 
-![alt text](screenshots/image-5.png)
+![alt text](screenshots/image-10.png)
 
 The layout for adding a new form is similar to updating the form. To access the new form page, the user clicks on the add new on the side bar
 
-![alt text](screenshots/image-6.png)
+![alt text](screenshots/image-11.png)
 
 To check the status of each company, the user can check for graphs under analytics and click on the actual graphs.
 
