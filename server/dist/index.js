@@ -20,17 +20,17 @@ const cors_1 = __importDefault(require("cors"));
 const path_1 = __importDefault(require("path"));
 const child_process_1 = require("child_process");
 dotenv_1.default.config();
-(0, child_process_1.exec)('pip install -r ../../pip_requirement.txt', (error, stdout, stderr) => {
-    if (error) {
-        console.error(`Error: ${error.message}`);
-        return;
-    }
-    if (stderr) {
-        console.error(`Standard Error: ${stderr}`);
-        return;
-    }
-    console.log(`Output: ${stdout}`);
-});
+// exec('pip install -r ../../pip_requirement.txt', (error, stdout, stderr) => {
+//     if (error) {
+//         console.error(`Error: ${error.message}`);
+//         return;
+//     }
+//     if (stderr) {
+//         console.error(`Standard Error: ${stderr}`);
+//         return;
+//     }
+//     console.log(`Output: ${stdout}`);
+// });
 const app = (0, express_1.default)();
 const port = process.env.PORT;
 app.use((0, cors_1.default)());
