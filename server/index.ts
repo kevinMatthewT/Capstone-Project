@@ -146,6 +146,48 @@ app.get("/api/get/investment/:id", async(req:Request, res: Response,next:NextFun
     }
 })
 
+app.get("/api/get/investment/filter/:filter", async (req: Request, res: Response): Promise<void> => {
+    const filter: string = req.params.filter;
+    let startDate: Date | undefined;
+    let endDate: Date | undefined;
+
+    try {
+        switch (filter) {
+            case 'this_month':
+                startDate = new Date(new Date().getFullYear(), new Date().getMonth(), 1);
+                endDate = new Date();
+                break;
+
+            case 'last_month':
+                const lastMonthDate = new Date(new Date().getFullYear(), new Date().getMonth() - 1, 1);
+                startDate = lastMonthDate;
+                endDate = new Date(new Date().getFullYear(), new Date().getMonth(), 0);
+                break;
+
+            case 'last_90_days':
+                startDate = new Date(new Date().setDate(new Date().getDate() - 90));
+                endDate = new Date();
+                break;
+
+            default:
+                res.status(400).json({ error: 'Invalid filter' });
+                return; 
+        }
+
+        const investments = await Investment.find({
+            Date_Of_Ownership: {
+                $gte: startDate,
+                $lte: endDate,
+            },
+        });
+
+        res.status(200).json(investments); 
+    } catch (error) {
+        console.error("Error fetching investments:", error);
+        res.status(500).json({ error: "Error fetching investments" }); 
+    }
+});
+
 
 
 //post operations

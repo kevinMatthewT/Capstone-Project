@@ -21,7 +21,7 @@ const RevenueVsEBIDAGraph = () => {
         const data = response.data;
 
         const formattedData = data
-          .filter(item => item.Revenue !== null && item.Ebida !== null) // Remove null/undefined values
+          .filter(item => item.Revenue !== null && item.Ebida !== null) 
           .map(item => ({
             x: item.Revenue,
             y: item.Ebida,

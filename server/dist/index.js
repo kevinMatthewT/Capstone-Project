@@ -122,64 +122,17 @@ app.get("/api/get/investment/Price_Asset/filter:filtername", (req, res, next) =>
         next(res.status(500).json({ error: "Investments not found" }));
     }
 }));
-
-// PLEASE DONT DELETE THIS AND THE ONE BELOW
-// vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv
-app.get("/api/get/investment/Date_Of_Ownership/filter/:filtername", async (req, res, next) => {
+app.get("/api/get/investment/Date_Of_Ownership/filter:filtername", (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const filtername = req.params.filtername;
-
-        const [day, month, year] = filtername.split("-"); 
-        const filterDate = new Date(year, month - 1, day); 
-
-        console.log('Raw filtername:', filtername);
-        console.log('Parsed filterDate:', filterDate);
-        console.log('Is valid date?', !isNaN(filterDate));
-
-        if (isNaN(filterDate)) {
-            return res.status(400).json({ error: 'Invalid date format' });
-        }
-
-        const allInvestments = await InvestorSchema_1.default.find({
-            Date_Of_Ownership: { $gte: filterDate },
-        });
-
+        const allInvestments = yield InvestorSchema_1.default.find({ Date_Of_Ownership: { $gte: filtername } });
         res.status(200).json(allInvestments);
-    } catch (error) {
+    }
+    catch (error) {
         console.error(error);
-        next(res.status(500).json({ error: "Error fetching investments" }));
+        next(res.status(500).json({ error: "Investments not found" }));
     }
-});
-app.get("/api/get/investment/filter/:filter", async (req, res) => {
-    const filter = req.params.filter;
-    let startDate, endDate;
-
-    switch (filter) {
-        case 'this_month':
-            startDate = new Date(new Date().getFullYear(), new Date().getMonth(), 1);
-            endDate = new Date();
-            break;
-        case 'last_month':
-            const lastMonthDate = new Date(new Date().getFullYear(), new Date().getMonth() - 1, 1);
-            startDate = lastMonthDate;
-            endDate = new Date(new Date().getFullYear(), new Date().getMonth(), 0);
-            break;
-        case 'last_90_days':
-            startDate = new Date(new Date().setDate(new Date().getDate() - 90));
-            endDate = new Date();
-            break;
-        default:
-            return res.status(400).json({ error: 'Invalid filter' });
-    }
-
-    const investments = await InvestorSchema_1.default.find({
-        Date_Of_Ownership: { $gte: startDate, $lte: endDate },
-    });
-
-    res.status(200).json(investments);
-});
-// UNTIL HERE
-
+}));
 app.get("/api/get/investment/:id", (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const uid = req.params.id;
@@ -189,6 +142,42 @@ app.get("/api/get/investment/:id", (req, res, next) => __awaiter(void 0, void 0,
     catch (error) {
         console.error(error);
         next(res.status(500).json({ error: "Investments not found" }));
+    }
+}));
+app.get("/api/get/investment/filter/:filter", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const filter = req.params.filter;
+    let startDate;
+    let endDate;
+    try {
+        switch (filter) {
+            case 'this_month':
+                startDate = new Date(new Date().getFullYear(), new Date().getMonth(), 1);
+                endDate = new Date();
+                break;
+            case 'last_month':
+                const lastMonthDate = new Date(new Date().getFullYear(), new Date().getMonth() - 1, 1);
+                startDate = lastMonthDate;
+                endDate = new Date(new Date().getFullYear(), new Date().getMonth(), 0);
+                break;
+            case 'last_90_days':
+                startDate = new Date(new Date().setDate(new Date().getDate() - 90));
+                endDate = new Date();
+                break;
+            default:
+                res.status(400).json({ error: 'Invalid filter' });
+                return;
+        }
+        const investments = yield InvestorSchema_1.default.find({
+            Date_Of_Ownership: {
+                $gte: startDate,
+                $lte: endDate,
+            },
+        });
+        res.status(200).json(investments);
+    }
+    catch (error) {
+        console.error("Error fetching investments:", error);
+        res.status(500).json({ error: "Error fetching investments" });
     }
 }));
 //post operations

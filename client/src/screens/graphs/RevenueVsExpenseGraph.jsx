@@ -86,7 +86,7 @@ const RevenueVsExpenseGraph = () => {
         },
         markers: {
             size: 5,
-            colors: ['#00b894'],
+            colors: ['#00b894', '#FF4560'],
             strokeColors: '#fff',
             strokeWidth: 2,
         },
