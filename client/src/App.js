@@ -12,8 +12,7 @@ import AnalyticScreen from './screens/AnalyticScreen';
 import ActualGraphScreen from './screens/ActualGraphScreen';
 import PredGraphScreen from './screens/PredGraphScreen';
 import ComparisonScreen from './screens/ComparisonScreen';
-import RevenueVsExpanseGraph from './screens/graphs/RevenueVsEBIDAGraph'
-
+import TotalRevenueGraph from './screens/graphs/TotalRevenueGraph';
 
 function App() {
   return (
@@ -28,7 +27,7 @@ function App() {
         <Route path='/pred-graphs' element={<PredGraphScreen/>}/>
         <Route path='/analytics/comparison' element={<ComparisonScreen/>}/>
         <Route path='/investments/update/:id' element={<UpdateInvestor/>}/>
-        <Route path='/graph' element={<RevenueVsExpanseGraph/>}/>
+        <Route path='/graph' element={<TotalRevenueGraph/>}/>
       </Routes>
   );
 }

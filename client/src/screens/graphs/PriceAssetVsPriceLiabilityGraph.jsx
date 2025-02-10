@@ -73,6 +73,11 @@ const PriceAssetVsPriceLiabilityGraph = () => {
     tooltip: {
       shared: true,
       intersect: false,
+      y: {
+        formatter: (value) => {
+          return new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR' }).format(value);
+        },
+      },
     },
     dataLabels: {
       enabled: false,

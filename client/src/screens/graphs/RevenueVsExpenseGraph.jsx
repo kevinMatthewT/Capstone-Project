@@ -1,7 +1,6 @@
 import axios from 'axios';
 import React, { useEffect, useState } from 'react'
 import Chart from "react-apexcharts";
-import { format, subMonths, subDays, startOfMonth, endOfMonth } from 'date-fns';
 import { Stack, Chip, Select, MenuItem, FormControl, Divider, useMediaQuery} from '@mui/material';
 
 const RevenueVsExpenseGraph = () => {
@@ -47,24 +46,25 @@ const RevenueVsExpenseGraph = () => {
 
     const options = {
         chart: {
-            type: 'line',
+            type: 'bar',
             toolbar: { show: true },
+        },
+        plotOptions: {
+            bar: {
+                horizontal: false,
+                columnWidth: '60%', 
+                endingShape: 'rounded', 
+            },
         },
         xaxis: {
             categories: chartData.categories,
             title: { text: 'Company' },
             labels: {
                 style: {
-                    colors: '#6c757d', 
+                    colors: '#6c757d',
                     fontSize: '12px',
                 },
-            }
-        },
-        axisBorder: {
-            show: false,
-        },
-        axisTicks: {
-            show: false,
+            },
         },
         yaxis: {
             title: { text: 'Amount (IDR)' },
@@ -75,20 +75,25 @@ const RevenueVsExpenseGraph = () => {
                 },
             },
         },
-        colors: ['#00E396', '#FF4560'],
+        colors: ['#00E396', '#FF4560'], 
         grid: {
             borderColor: '#e9ecef',
             strokeDashArray: 4,
         },
-        stroke: {
-            curve: 'smooth',
-            width: 3,
+        dataLabels: {
+            enabled: false, 
         },
-        markers: {
-            size: 5,
-            colors: ['#00b894', '#FF4560'],
-            strokeColors: '#fff',
-            strokeWidth: 2,
+        legend: {
+            position: 'top',
+        },
+        tooltip: {
+            shared: true,
+            intersect: false,
+            y: {
+            formatter: (value) => {
+                return new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR' }).format(value);
+            },
+            },
         },
     };
     
@@ -161,7 +166,7 @@ const RevenueVsExpenseGraph = () => {
             <div style={{padding: '16px'}}>
                 <Divider style={{ marginBottom: '16px', backgroundColor: '#eceff1', boxShadow: '0px 2px 4px rgba(0, 0, 0, 0.2)' }} />
                 
-                <Chart options={options} series={series} type="line" height={450} />
+                <Chart options={options} series={series} type="bar" height={450} />
             </div>
         </div>    
     )

@@ -57,7 +57,19 @@ const RevenueVsEBIDAGraph = () => {
     tooltip: {
       custom: ({ series, seriesIndex, dataPointIndex, w }) => {
         const pointData = w.globals.initialSeries[seriesIndex].data[dataPointIndex];
-        return `<div style="padding:10px;"><strong>${pointData.company}</strong><br/>Revenue: ${pointData.x}<br/>EBIDA: ${pointData.y}</div>`;
+    
+        const formatIDR = (value) =>
+          new Intl.NumberFormat('id-ID', {
+            style: 'currency',
+            currency: 'IDR',
+          }).format(value);
+    
+        return `
+          <div style="padding:10px; font-size: 14px;">
+            <strong>${pointData.company}</strong><br/>
+            Revenue: ${formatIDR(pointData.x)}<br/>
+            EBIDA: ${formatIDR(pointData.y)}
+          </div>`;
       }
     },
     markers: {

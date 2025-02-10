@@ -1,19 +1,21 @@
 import { useEffect, useState } from 'react'
 import axios from 'axios';
 import {useParams ,useNavigate} from 'react-router-dom'
-// import './styles/UpdateInvestor.css'
 import { useAuthState } from "react-firebase-hooks/auth";
 import { auth } from "../Firebase";
 import { TextField, Button, Box, Divider, Typography} from "@mui/material";
 import Grid from '@mui/material/Grid2';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider, DatePicker} from '@mui/x-date-pickers';
+import { Formik, Form, Field } from "formik";
+import classNames from "classnames";
+import * as Yup from "yup";
 
 //components
 import Sidebar from './global/Sidebar'
 import Topbar from './global/Topbar'
-import HeaderTitle from './global/HeaderTitle';
-import "./styles/InvestorForm.css"
+import './styles/UpdateInvestor.css'
+
 import dayjs from 'dayjs';
 
 const containerStyle = (isSidebarOpen) => ({
@@ -26,50 +28,26 @@ function UpdateInvestor() {
     const [isSidebarOpen, setIsSidebarOpen] = useState(true);
     const {id}= useParams();
     const navigate=useNavigate();
+    const [investment, setInvestment] = useState({});
 
-    const [investments, setInvestment] = useState({});
+    // const [investments, setInvestment] = useState({});
 
-    const [Company, setCompany]= useState('');
-    const [Company_Investor, setCompany_Investor]= useState('');
-    const [Domicile, setDomicile]= useState('');
-    const [Year_Of_Operation,setYear_Of_Operation]= useState('');
-    const [Business, setBusiness]= useState('');
-    const [Percentage_Ownership,setPercentage_Ownership]= useState('');
-    const [Revenue, setRevenue]= useState('');
-    const [Expense, setExpense]= useState('');
-    const [Ebida, setEbida]= useState('');
-    const [Tax_Investment, setTax_Investment]= useState('');
-    const [Price_Asset,setPrice_Asset]= useState('');
-    const [Price_Liability, setPrice_Liability]= useState('');
-    const [Equity, setEquity]= useState('');
-    const [COGS,setCOGS]=useState('')
-    const [Date_Of_Ownership, setDate_Of_Ownership]= useState(dayjs());
-
-    useEffect(()=>{
-        axios.get(`http://localhost:8080/api/get/investment/${id}`)
-        .then(investments=>setInvestment(investments.data))
-        .catch(err=>console.log(err));
-
-        setCompany(investments.Company);
-        setCompany_Investor(investments.Company_Investor)
-        setDomicile(investments.Domicile);
-        setYear_Of_Operation(investments.Year_Of_Operation);
-        setBusiness(investments.Business);
-        setPercentage_Ownership(investments.Percentage_Ownership);
-        setRevenue(investments.Revenue);
-        setExpense(investments.Expense);
-        setEbida(investments.Ebida);
-        setTax_Investment(investments.Tax_Investment);
-        setPrice_Asset(investments.Price_Asset);
-        setPrice_Liability(investments.Price_Liability);
-        setEquity(investments.Equity);
-        setCOGS(investments.COGS);
-        if (investments.Date_Of_Ownership) {
-          setDate_Of_Ownership(dayjs(investments.Date_Of_Ownership));
-        }
-    },[]
-    )
-
+    // const [Company, setCompany]= useState('');
+    // const [Company_Investor, setCompany_Investor]= useState('');
+    // const [Domicile, setDomicile]= useState('');
+    // const [Year_Of_Operation,setYear_Of_Operation]= useState('');
+    // const [Business, setBusiness]= useState('');
+    // const [Percentage_Ownership,setPercentage_Ownership]= useState('');
+    // const [Revenue, setRevenue]= useState('');
+    // const [Expense, setExpense]= useState('');
+    // const [Ebida, setEbida]= useState('');
+    // const [Tax_Investment, setTax_Investment]= useState('');
+    // const [Price_Asset,setPrice_Asset]= useState('');
+    // const [Price_Liability, setPrice_Liability]= useState('');
+    // const [Equity, setEquity]= useState('');
+    // const [COGS,setCOGS]=useState('')
+    // const [Date_Of_Ownership, setDate_Of_Ownership]= useState(dayjs());
+ 
     const [user, loading, error] = useAuthState(auth);
 
     useEffect(() => {
@@ -87,8 +65,11 @@ function UpdateInvestor() {
         }
     }
 
-
-    // console.log(investments)
+    useEffect(()=>{
+      axios.get(`http://localhost:8080/api/get/investment/${id}`)
+      .then((response) => setInvestment(response.data))
+      .catch(err=>console.log(err));
+    },[id]);
 
     useEffect(() => {
       // Apply specific styles when the component is mounted
@@ -104,32 +85,80 @@ function UpdateInvestor() {
       };
     }, []);
     
-    const handleSubmit =async (e)=>{
-        
-        await axios.put(`http://localhost:8080/api/update/investment/${id}`,{
-          Company,
-          Company_Investor,   
-          Domicile,
-          Year_Of_Operation,
-          Business,
-          Percentage_Ownership,
-          Revenue,
-          Expense,
-          Ebida,
-          Tax_Investment,
-          Price_Asset,
-          Price_Liability,
-          Equity,
-          COGS,
-          Date_Of_Ownership
-        })
-    .then(navigate('/investments'))
-    .catch(err=>console.log(err));
+    const validationSchema = Yup.object({
+      Company: Yup.string().required("Company Name is required"),
+      Company_Investor: Yup.string().required("Company Investor is required"),
+      Domicile: Yup.string().required("Domicile is required"),
+      Year_Of_Operation: Yup.number()
+        .required("Year of Operation is required")
+        .min(1900, "Enter a valid year")
+        .max(new Date().getFullYear(), "Year cannot exceed the current year"),
+      Business: Yup.string().required("Business Type is required"),
+      Percentage_Ownership: Yup.number()
+        .required("Percentage of Ownership is required")
+        .min(0, "Value must be at least 0")
+        .max(100, "Value must not exceed 100"),
+      Revenue: Yup.number()
+        .required("Revenue is required")
+        .min(0, "Revenue cannot be negative"),
+      Expense: Yup.number()
+        .required("Expense is required")
+        .min(0, "Expense cannot be negative"),
+      Ebida: Yup.number()
+        .required("EBIDA is required")
+        .min(0, "EBIDA cannot be negative"),
+      Tax_Investment: Yup.number()
+        .required("Tax Investment is required")
+        .min(0, "Tax Investment cannot be negative"),
+      Price_Asset: Yup.number()
+        .required("Price of Asset is required")
+        .min(0, "Price of Asset cannot be negative"),
+      Price_Liability: Yup.number()
+        .required("Price Liability is required")
+        .min(0, "Price Liability cannot be negative"),
+      Equity: Yup.number()
+        .required("Equity is required")
+        .min(0, "Equity cannot be negative"),
+      COGS: Yup.number()
+        .required("COGS is required")
+        .min(0, "COGS cannot be negative"),
+      Date_Of_Ownership: Yup.date()
+        .required("Date of Ownership is required")
+        .typeError("Invalid date format"),
+    });
 
-    
-    }
+    const initialValues = {
+      Company: investment.Company || "",
+      Company_Investor: investment.Company_Investor || "",
+      Domicile: investment.Domicile || "",
+      Year_Of_Operation: investment.Year_Of_Operation || "",
+      Business: investment.Business || "",
+      Percentage_Ownership: investment.Percentage_Ownership || "",
+      Revenue: investment.Revenue || "",
+      Expense: investment.Expense || "",
+      Ebida: investment.Ebida || "",
+      Tax_Investment: investment.Tax_Investment || "",
+      Price_Asset: investment.Price_Asset || "",
+      Price_Liability: investment.Price_Liability || "",
+      Equity: investment.Equity || "",
+      COGS: investment.COGS || "",
+      Date_Of_Ownership: investment.Date_Of_Ownership
+        ? dayjs(investment.Date_Of_Ownership)
+        : dayjs(),
+    };
+  
+    const onSubmit = async (values, {setSubmitting})=>{
+      try{
+        await axios.put(`http://localhost:8080/api/update/investment/${id}`, values);
+        navigate('/investments')
+      }catch(erorr) {
+        console.error("Error submitting form:", error);
+      } finally {
+        setSubmitting(false);
+      }
+    };
 
-    if(user){
+  if(user){
   return (
     <>
     <div className='flex min-h-screen h-auto'>
@@ -159,160 +188,121 @@ function UpdateInvestor() {
 
                 <Divider style={{ marginBottom: '2rem', backgroundColor: '#eef2f6', width: '100%',}} />
 
-                <form onSubmit={handleSubmit}>
+                <Formik
+                  initialValues={initialValues}
+                  enableReinitialize
+                  validationSchema={validationSchema}
+                  onSubmit={onSubmit}
+                >
+                  {({ values, errors, touched, handleChange, handleBlur, isSubmitting, setFieldValue,}) => (
+                    <Form>
 
-                  {/* Section 1 */}
-
-                  <Typography variant='h6' gutterBottom style={{fontWeight:'600', fontSize: '16px', margin: '16px 0'}}>A. Company Details</Typography>
+                    {/* Section 1 */}
+  
+                    <Typography variant='h6' gutterBottom style={{fontWeight:'600', fontSize: '16px', margin: '16px 0'}}>A. Company Details</Typography>
                     <Grid container spacing={2} alignItems='center'>
                       <Grid item size={{xs:12, md:2}}>
-                        <Typography style={{fontSize:'14px', fontWeight:'600', color:'#4b5565'}}>Name: </Typography>
+                        <Typography className="typography-label">Name: </Typography>
                       </Grid>
                         <Grid item size={{xs:12, md:10}}>
-                          <TextField
+                          <Field
+                            as={TextField}
                             fullWidth
-                            placeholder={investments.Company}
+                            placeholder="Enter Company"
                             variant="outlined"
-                            defaultValue={Company}
-                            onChange={(e) => setCompany(e.target.value)}
-                            sx={{
-                            "& .MuiOutlinedInput-root": {
-                              height: "45px", 
-                              fontSize: "14px",
-                              borderRadius: "12px", 
-                              backgroundColor: "#f7f9fc", 
-                              "& fieldset": {
-                                borderRadius: "12px", 
-                              },
-                              "&:hover fieldset": {
-                                borderColor: "#4b5565", 
-                              },
-                              "&.Mui-focused fieldset": {
-                                borderColor: "#4b5565", 
-                              },
-                            },
-                          }}
+                            className={classNames("textbox-root", {
+                              error: touched.Company && errors.Company, 
+                            })}
+                            name="Company"
+                            value={values.Company}
+                            onChange={handleChange}
+                            onBlur={handleBlur}
+                            error={touched.Company && Boolean(errors.Company)}
+                            helperText={touched.Company && errors.Company}
                           />
                         </Grid>
 
                       <Grid item size={{xs:12, md:2}}>
-                        <Typography style={{fontSize:'14px', fontWeight:'600', color:'#4b5565'}}>Company Investor: </Typography>
+                        <Typography className="typography-label">Company Investor: </Typography>
                       </Grid>
                         <Grid item size={{xs:12, md:10}}>
-                          <TextField
+                          <Field
+                            as={TextField}
                             fullWidth
-                            placeholder={investments.Company_Investor}
+                            placeholder="Enter Company Investor"
                             variant="outlined"
-                            defaultValue={Company_Investor}
-                            onChange={(e) => setCompany_Investor(e.target.value)}
-                            sx={{
-                            "& .MuiOutlinedInput-root": {
-                              height: "45px", 
-                              fontSize: "14px",
-                              borderRadius: "12px", 
-                              backgroundColor: "#f7f9fc", 
-                              "& fieldset": {
-                                borderRadius: "12px", 
-                              },
-                              "&:hover fieldset": {
-                                borderColor: "#4b5565", 
-                              },
-                              "&.Mui-focused fieldset": {
-                                borderColor: "#4b5565", 
-                              },
-                            },
-                          }}
+                            className={classNames("textbox-root", {
+                              error: touched.Company_Investor && errors.Company_Investor, 
+                            })}
+                            name="Company_Investor"
+                            value={values.Company_Investor}
+                            onChange={handleChange}
+                            onBlur={handleBlur}
+                            error={touched.Company_Investor && Boolean(errors.Company_Investor)}
+                            helperText={touched.Company_Investor && errors.Company_Investor}
                           />
                         </Grid>
 
                       <Grid item size={{xs:12, md:2}}>
-                        <Typography style={{fontSize:'14px', fontWeight:'600', color:'#4b5565'}}>Domicile: </Typography>
+                        <Typography className="typography-label">Domicile: </Typography>
                       </Grid>
                         <Grid item size={{xs:12, md:10}}>
-                          <TextField
+                          <Field
+                            as={TextField}
                             fullWidth
-                            placeholder={investments.Domicile}
+                            placeholder="Enter Domicile"
                             variant="outlined"
-                            defaultValue={Domicile}
-                            onChange={(e) => setDomicile(e.target.value)}
-                            sx={{
-                            "& .MuiOutlinedInput-root": {
-                              height: "45px", 
-                              fontSize: "14px",
-                              borderRadius: "12px", 
-                              backgroundColor: "#f7f9fc", 
-                              "& fieldset": {
-                                borderRadius: "12px", 
-                              },
-                              "&:hover fieldset": {
-                                borderColor: "#4b5565", 
-                              },
-                              "&.Mui-focused fieldset": {
-                                borderColor: "#4b5565", 
-                              },
-                            },
-                          }}
+                            className={classNames("textbox-root", {
+                              error: touched.Domicile && errors.Domicile, 
+                            })}
+                            name="Domicile"
+                            value={values.Domicile}
+                            onChange={handleChange}
+                            onBlur={handleBlur}
+                            error={touched.Domicile && Boolean(errors.Domicile)}
+                            helperText={touched.Domicile && errors.Domicile}
                           />
                         </Grid>
 
                       <Grid item size={{xs:12, md:2}}>
-                        <Typography style={{fontSize:'14px', fontWeight:'600', color:'#4b5565'}}>Year of Operation: </Typography>
+                        <Typography className="typography-label">Year of Operation: </Typography>
                       </Grid>
                         <Grid item size={{xs:12, md:10}}>
-                          <TextField
+                          <Field
+                            as={TextField}
                             fullWidth
-                            placeholder={investments.Year_Of_Operation}
+                            placeholder="Enter Year Of Operation"
                             variant="outlined"
-                            type="number"
-                            defaultValue={Year_Of_Operation}
-                            onChange={(e) => setYear_Of_Operation(e.target.value)}
-                            sx={{
-                            "& .MuiOutlinedInput-root": {
-                              height: "45px", 
-                              fontSize: "14px",
-                              borderRadius: "12px", 
-                              backgroundColor: "#f7f9fc", 
-                              "& fieldset": {
-                                borderRadius: "12px", 
-                              },
-                              "&:hover fieldset": {
-                                borderColor: "#4b5565", 
-                              },
-                              "&.Mui-focused fieldset": {
-                                borderColor: "#4b5565", 
-                              },
-                            },
-                          }}
+                            className={classNames("textbox-root", {
+                              error: touched.Year_Of_Operation && errors.Year_Of_Operation, 
+                            })}
+                            name="Year_Of_Operation"
+                            value={values.Year_Of_Operation}
+                            onChange={handleChange}
+                            onBlur={handleBlur}
+                            error={touched.Year_Of_Operation && Boolean(errors.Year_Of_Operation)}
+                            helperText={touched.Year_Of_Operation && errors.Year_Of_Operation}
                           />
                         </Grid>
 
                       <Grid item size={{xs:12, md:2}}>
-                        <Typography style={{fontSize:'14px', fontWeight:'600', color:'#4b5565'}}>Business Type: </Typography>
+                        <Typography className="typography-label">Business Type: </Typography>
                       </Grid>
                         <Grid item size={{xs:12, md:10}}>
-                          <TextField
+                          <Field
+                            as={TextField}
                             fullWidth
-                            placeholder={investments.Business}
+                            placeholder="Enter Business Type"
                             variant="outlined"
-                            value={Business}
-                            onChange={(e) => setBusiness(e.target.value)}
-                            sx={{
-                            "& .MuiOutlinedInput-root": {
-                              height: "45px", 
-                              fontSize: "14px",
-                              borderRadius: "12px", 
-                              backgroundColor: "#f7f9fc", 
-                              "& fieldset": {
-                                borderRadius: "12px", 
-                              },
-                              "&:hover fieldset": {
-                                borderColor: "#4b5565", 
-                              },
-                              "&.Mui-focused fieldset": {
-                                borderColor: "#4b5565", 
-                              },
-                            },
-                          }}
+                            className={classNames("textbox-root", {
+                              error: touched.Business && errors.Business, 
+                            })}
+                            name="Business"
+                            value={values.Business}
+                            onChange={handleChange}
+                            onBlur={handleBlur}
+                            error={touched.Business && Boolean(errors.Business)}
+                            helperText={touched.Business && errors.Business}
                           />
                         </Grid>
                     </Grid>
@@ -321,340 +311,237 @@ function UpdateInvestor() {
                     
                     {/* Section 2 */}
 
-                  
-                  <LocalizationProvider dateAdapter={AdapterDayjs}>
-                  <Typography variant='h6' gutterBottom style={{fontWeight:'600', fontSize: '18px', margin: '16px 0'}}>B. Investment Details</Typography>
-                    
-                    <Grid container spacing={2} alignItems='center'>
-                    <Grid item size={{xs:12, md:2}}>
-                        <Typography style={{fontSize:'14px', fontWeight:'600', color:'#4b5565'}}>Percentage of Ownership: </Typography>
-                      </Grid>
-                      <Grid item size={{xs:12, md:10}}>
-                        <TextField
-                          fullWidth
-                          placeholder={investments.Percentage_Ownership}
-                          variant="outlined"
-                          type="number"
-                          defaultValue={Percentage_Ownership}
-                          onChange={(e) => setPercentage_Ownership(e.target.value)}
-                          sx={{
-                            "& .MuiOutlinedInput-root": {
-                              height: "45px", 
-                              fontSize: "14px",
-                              borderRadius: "12px", 
-                              backgroundColor: "#f7f9fc", 
-                              "& fieldset": {
-                                borderRadius: "12px", 
-                              },
-                              "&:hover fieldset": {
-                                borderColor: "#4b5565", 
-                              },
-                              "&.Mui-focused fieldset": {
-                                borderColor: "#4b5565", 
-                              },
-                            },
-                          }}
-                        />
-                      </Grid>
-
-                      <Grid item size={{xs:12, md:2}}>
-                        <Typography style={{fontSize:'14px', fontWeight:'600', color:'#4b5565'}}>Revenue: </Typography>
-                      </Grid>
-                      <Grid item size={{xs:12, md:10}}>
-                        <TextField
-                          fullWidth
-                          placeholder={investments.Revenue}
-                          variant="outlined"
-                          type="number"
-                          defaultValue={Revenue}
-                          onChange={(e) => setRevenue(e.target.value)}
-                          sx={{
-                            "& .MuiOutlinedInput-root": {
-                              height: "45px", 
-                              fontSize: "14px",
-                              borderRadius: "12px", 
-                              backgroundColor: "#f7f9fc", 
-                              "& fieldset": {
-                                borderRadius: "12px", 
-                              },
-                              "&:hover fieldset": {
-                                borderColor: "#4b5565", 
-                              },
-                              "&.Mui-focused fieldset": {
-                                borderColor: "#4b5565", 
-                              },
-                            },
-                          }}
-                        />
-                      </Grid>
-
-                      <Grid item size={{xs:12, md:2}}>
-                        <Typography style={{fontSize:'14px', fontWeight:'600', color:'#4b5565'}}>Expense: </Typography>
-                      </Grid>
-                      <Grid item size={{xs:12, md:10}}>
-                        <TextField
-                          fullWidth
-                          placeholder={investments.Expense}
-                          variant="outlined"
-                          type="number"
-                          defaultValue={Expense}
-                          onChange={(e) => setExpense(e.target.value)}
-                          sx={{
-                            "& .MuiOutlinedInput-root": {
-                              height: "45px", 
-                              fontSize: "14px",
-                              borderRadius: "12px", 
-                              backgroundColor: "#f7f9fc", 
-                              "& fieldset": {
-                                borderRadius: "12px", 
-                              },
-                              "&:hover fieldset": {
-                                borderColor: "#4b5565", 
-                              },
-                              "&.Mui-focused fieldset": {
-                                borderColor: "#4b5565", 
-                              },
-                            },
-                          }}
-                        />
-                      </Grid>
-
-                      <Grid item size={{xs:12, md:2}}>
-                        <Typography style={{fontSize:'14px', fontWeight:'600', color:'#4b5565'}}>EBIDA: </Typography>
-                      </Grid>
-                      <Grid item size={{xs:12, md:10}}>
-                        <TextField
-                          fullWidth
-                          placeholder={investments.Ebida}
-                          variant="outlined"
-                          type="number"
-                          defaultValue={Ebida}
-                          onChange={(e) => setEbida(e.target.value)}
-                          sx={{
-                            "& .MuiOutlinedInput-root": {
-                              height: "45px", 
-                              fontSize: "14px",
-                              borderRadius: "12px", 
-                              backgroundColor: "#f7f9fc", 
-                              "& fieldset": {
-                                borderRadius: "12px", 
-                              },
-                              "&:hover fieldset": {
-                                borderColor: "#4b5565", 
-                              },
-                              "&.Mui-focused fieldset": {
-                                borderColor: "#4b5565", 
-                              },
-                            },
-                          }}
-                        />
-                      </Grid>
-
-                      <Grid item size={{xs:12, md:2}}>
-                        <Typography style={{fontSize:'14px', fontWeight:'600', color:'#4b5565'}}>Tax Investment: </Typography>
-                      </Grid>
-                      <Grid item size={{xs:12, md:10}}>
-                        <TextField
-                          fullWidth
-                          placeholder={investments.Tax_Investment}
-                          variant="outlined"
-                          type="number"
-                          defaultValue={Tax_Investment}
-                          onChange={(e) => setTax_Investment(e.target.value)}
-                          sx={{
-                            "& .MuiOutlinedInput-root": {
-                              height: "45px", 
-                              fontSize: "14px",
-                              borderRadius: "12px", 
-                              backgroundColor: "#f7f9fc", 
-                              "& fieldset": {
-                                borderRadius: "12px", 
-                              },
-                              "&:hover fieldset": {
-                                borderColor: "#4b5565", 
-                              },
-                              "&.Mui-focused fieldset": {
-                                borderColor: "#4b5565", 
-                              },
-                            },
-                          }}
-                        />
-                      </Grid>
-
-                      <Grid item size={{xs:12, md:2}}>
-                        <Typography style={{fontSize:'14px', fontWeight:'600', color:'#4b5565'}}>Price of Asset: </Typography>
-                      </Grid>
-                      <Grid item size={{xs:12, md:10}}>
-                        <TextField
-                          fullWidth
-                          placeholder={investments.Price_Asset}
-                          variant="outlined"
-                          type="number"
-                          defaultValue={Price_Asset}
-                          onChange={(e) => setPrice_Asset(e.target.value)}
-                          sx={{
-                            "& .MuiOutlinedInput-root": {
-                              height: "45px", 
-                              fontSize: "14px",
-                              borderRadius: "12px", 
-                              backgroundColor: "#f7f9fc", 
-                              "& fieldset": {
-                                borderRadius: "12px", 
-                              },
-                              "&:hover fieldset": {
-                                borderColor: "#4b5565", 
-                              },
-                              "&.Mui-focused fieldset": {
-                                borderColor: "#4b5565", 
-                              },
-                            },
-                          }}
-                        />
-                      </Grid>
-
-                      <Grid item size={{xs:12, md:2}}>
-                        <Typography style={{fontSize:'14px', fontWeight:'600', color:'#4b5565'}}>Price Liability: </Typography>
-                      </Grid>
-                      <Grid item size={{xs:12, md:10}}>
-                        <TextField
-                          fullWidth
-                          placeholder={investments.Price_Liability}
-                          variant="outlined"
-                          type="number"
-                          defaultValue={Price_Liability}
-                          onChange={(e) => setPrice_Liability(e.target.value)}
-                          sx={{
-                            "& .MuiOutlinedInput-root": {
-                              height: "45px", 
-                              fontSize: "14px",
-                              borderRadius: "12px", 
-                              backgroundColor: "#f7f9fc", 
-                              "& fieldset": {
-                                borderRadius: "12px", 
-                              },
-                              "&:hover fieldset": {
-                                borderColor: "#4b5565", 
-                              },
-                              "&.Mui-focused fieldset": {
-                                borderColor: "#4b5565", 
-                              },
-                            },
-                          }}
-                        />
-                      </Grid>
-
-                      <Grid item size={{xs:12, md:2}}>
-                        <Typography style={{fontSize:'14px', fontWeight:'600', color:'#4b5565'}}>Equity: </Typography>
-                      </Grid>
-                      <Grid item size={{xs:12, md:10}}>
-                        <TextField
-                          fullWidth
-                          placeholder={investments.Equity}
-                          variant="outlined"
-                          type="number"
-                          defaultValue={Equity}
-                          onChange={(e) => setEquity(e.target.value)}
-                          sx={{
-                            "& .MuiOutlinedInput-root": {
-                              height: "45px", 
-                              fontSize: "14px",
-                              borderRadius: "12px", 
-                              backgroundColor: "#f7f9fc", 
-                              "& fieldset": {
-                                borderRadius: "12px", 
-                              },
-                              "&:hover fieldset": {
-                                borderColor: "#4b5565", 
-                              },
-                              "&.Mui-focused fieldset": {
-                                borderColor: "#4b5565", 
-                              },
-                            },
-                          }}
-                        />
-                      </Grid>
-
-                      <Grid item size={{xs:12, md:2}}>
-                        <Typography style={{fontSize:'14px', fontWeight:'600', color:'#4b5565'}}>COGS: </Typography>
-                      </Grid>
-                      <Grid item size={{xs:12, md:10}}>
-                        <TextField
-                          fullWidth
-                          placeholder={investments.COGS}
-                          variant="outlined"
-                          type="number"
-                          defaultValue={COGS}
-                          onChange={(e) => setCOGS(e.target.value)}
-                          sx={{
-                            "& .MuiOutlinedInput-root": {
-                              height: "45px", 
-                              fontSize: "14px",
-                              borderRadius: "12px", 
-                              backgroundColor: "#f7f9fc", 
-                              "& fieldset": {
-                                borderRadius: "12px", 
-                              },
-                              "&:hover fieldset": {
-                                borderColor: "#4b5565", 
-                              },
-                              "&.Mui-focused fieldset": {
-                                borderColor: "#4b5565", 
-                              },
-                            },
-                          }}
-                        />
-                      </Grid>
+                    <LocalizationProvider dateAdapter={AdapterDayjs}>
+                    <Typography variant='h6' gutterBottom style={{fontWeight:'600', fontSize: '18px', margin: '16px 0'}}>B. Investment Details</Typography>
                       
+                      <Grid container spacing={2} alignItems='center'>
                       <Grid item size={{xs:12, md:2}}>
-                        <Typography style={{fontSize:'14px', fontWeight:'600', color:'#4b5565'}}>Date of Ownership: </Typography>
-                      </Grid>
-                      <Grid item size={{xs:12, md:10}}>
-                        <DatePicker
-                          placeholder={investments.Date_Of_Ownership}
-                          defaultValue={Date_Of_Ownership}
-                          onChange={(newValue) => setDate_Of_Ownership(newValue)}
-                          renderInput={(params) => (
-                            <TextField
-                              {...params}
+                          <Typography className="typography-label">Percentage of Ownership: </Typography>
+                        </Grid>
+                        <Grid item size={{xs:12, md:10}}>
+                          <Field
+                            as={TextField}
+                            fullWidth
+                            placeholder="Enter Percentage of Ownership"
+                            variant="outlined"
+                            className={classNames("textbox-root", {
+                              error: touched.Percentage_Ownership && errors.Percentage_Ownership, 
+                            })}
+                            name="Percentage_Ownership"
+                            value={values.Percentage_Ownership}
+                            onChange={handleChange}
+                            onBlur={handleBlur}
+                            error={touched.Percentage_Ownership && Boolean(errors.Percentage_Ownership)}
+                            helperText={touched.Percentage_Ownership && errors.Percentage_Ownership}
+                          /> 
+                        </Grid>
+
+                        <Grid item size={{xs:12, md:2}}>
+                          <Typography className="typography-label">Revenue: </Typography>
+                        </Grid>
+                        <Grid item size={{xs:12, md:10}}>
+                          <Field
+                            as={TextField}
+                            fullWidth
+                            placeholder="Enter Revenue"
+                            variant="outlined"
+                            className={classNames("textbox-root", {
+                              error: touched.Revenue && errors.Revenue, 
+                            })}
+                            name="Revenue"
+                            value={values.Revenue}
+                            onChange={handleChange}
+                            onBlur={handleBlur}
+                            error={touched.Revenue && Boolean(errors.Revenue)}
+                            helperText={touched.Revenue && errors.Revenue}
+                          />
+                        </Grid>
+
+                        <Grid item size={{xs:12, md:2}}>
+                          <Typography className="typography-label">Expense: </Typography>
+                        </Grid>
+                        <Grid item size={{xs:12, md:10}}>
+                          <Field
+                            as={TextField}
+                            fullWidth
+                            placeholder="Enter Expense"
+                            variant="outlined"
+                            className={classNames("textbox-root", {
+                              error: touched.Expense && errors.Expense, 
+                            })}
+                            name="Expense"
+                            value={values.Expense}
+                            onChange={handleChange}
+                            onBlur={handleBlur}
+                            error={touched.Expense && Boolean(errors.Expense)}
+                            helperText={touched.Expense && errors.Expense}
+                          />
+                        </Grid>
+
+                        <Grid item size={{xs:12, md:2}}>
+                          <Typography className="typography-label">EBIDA: </Typography>
+                        </Grid>
+                        <Grid item size={{xs:12, md:10}}>
+                          <Field
+                            as={TextField}
+                            fullWidth
+                            placeholder="Enter EBIDA"
+                            variant="outlined"
+                            className={classNames("textbox-root", {
+                              error: touched.Ebida && errors.Ebida, 
+                            })}
+                            name="Ebida"
+                            value={values.Ebida}
+                            onChange={handleChange}
+                            onBlur={handleBlur}
+                            error={touched.Ebida && Boolean(errors.Ebida)}
+                            helperText={touched.Ebida && errors.Ebida}
+                          />
+                        </Grid>
+
+                        <Grid item size={{xs:12, md:2}}>
+                          <Typography className="typography-label">Tax Investment: </Typography>
+                        </Grid>
+                        <Grid item size={{xs:12, md:10}}>
+                          <Field
+                            as={TextField}
+                            fullWidth
+                            placeholder="Enter Tax Investment"
+                            variant="outlined"
+                            className={classNames("textbox-root", {
+                              error: touched.Tax_Investment && errors.Tax_Investment, 
+                            })}
+                            name="Tax_Investment"
+                            value={values.Tax_Investment}
+                            onChange={handleChange}
+                            onBlur={handleBlur}
+                            error={touched.Tax_Investment && Boolean(errors.Tax_Investment)}
+                            helperText={touched.Tax_Investment && errors.Tax_Investment}
+                          />
+                        </Grid>
+
+                        <Grid item size={{xs:12, md:2}}>
+                          <Typography className="typography-label">Price of Asset: </Typography>
+                        </Grid>
+                        <Grid item size={{xs:12, md:10}}>
+                          <Field
+                            as={TextField}
+                            fullWidth
+                            placeholder="Enter Price of Asset"
+                            variant="outlined"
+                            className={classNames("textbox-root", {
+                              error: touched.Price_Asset && errors.Price_Asset, 
+                            })}
+                            name="Price_Asset"
+                            value={values.Price_Asset}
+                            onChange={handleChange}
+                            onBlur={handleBlur}
+                            error={touched.Price_Asset && Boolean(errors.Price_Asset)}
+                            helperText={touched.Price_Asset && errors.Price_Asset}
+                          />
+                        </Grid>
+
+                        <Grid item size={{xs:12, md:2}}>
+                          <Typography className="typography-label">Price Liability: </Typography>
+                        </Grid>
+                        <Grid item size={{xs:12, md:10}}>
+                          <Field
+                              as={TextField}
                               fullWidth
+                              placeholder="Enter Price Liability"
                               variant="outlined"
-                              sx={{
-                            "& .MuiOutlinedInput-root": {
-                              height: "45px", 
-                              fontSize: "14px",
-                              borderRadius: "12px", 
-                              backgroundColor: "#f7f9fc", 
-                              "& fieldset": {
-                                borderRadius: "12px", 
-                              },
-                              "&:hover fieldset": {
-                                borderColor: "#4b5565", 
-                              },
-                              "&.Mui-focused fieldset": {
-                                borderColor: "#4b5565", 
-                              },
-                            },
-                          }}
+                              className={classNames("textbox-root", {
+                                error: touched.Price_Liability && errors.Price_Liability, 
+                              })}
+                              name="Price_Liability"
+                              value={values.Price_Liability}
+                              onChange={handleChange}
+                              onBlur={handleBlur}
+                              error={touched.Price_Liability && Boolean(errors.Price_Liability)}
+                              helperText={touched.Price_Liability && errors.Price_Liability}
                             />
-                          )}
-                        />
+                        </Grid>
+
+                        <Grid item size={{xs:12, md:2}}>
+                          <Typography className="typography-label">Equity: </Typography>
+                        </Grid>
+                        <Grid item size={{xs:12, md:10}}>
+                        <Field
+                              as={TextField}
+                              fullWidth
+                              placeholder="Enter Equity"
+                              variant="outlined"
+                              className={classNames("textbox-root", {
+                                error: touched.Equity && errors.Equity, 
+                              })}
+                              name="Equity"
+                              value={values.Equity}
+                              onChange={handleChange}
+                              onBlur={handleBlur}
+                              error={touched.Equity && Boolean(errors.Equity)}
+                              helperText={touched.Equity && errors.Equity}
+                            />
+                        </Grid>
+
+                        <Grid item size={{xs:12, md:2}}>
+                          <Typography className="typography-label">COGS: </Typography>
+                        </Grid>
+                        <Grid item size={{xs:12, md:10}}>
+                        <Field
+                              as={TextField}
+                              fullWidth
+                              placeholder="Enter COGS"
+                              variant="outlined"
+                              className={classNames("textbox-root", {
+                                error: touched.COGS && errors.COGS, 
+                              })}
+                              name="COGS"
+                              value={values.COGS}
+                              onChange={handleChange}
+                              onBlur={handleBlur}
+                              error={touched.COGS && Boolean(errors.COGS)}
+                              helperText={touched.COGS && errors.COGS}
+                            />
+                        </Grid>
+                        
+                        <Grid item size={{xs:12, md:2}}>
+                          <Typography className="typography-label">Date of Ownership: </Typography>
+                        </Grid>
+                        <Grid item size={{xs:12, md:10}}>
+                          <DatePicker
+                            placeholder="Date of Ownership"
+                            value={values.Date_Of_Ownership}
+                            onChange={(newValue) => setFieldValue("Date_Of_Ownership", newValue)}
+                            renderInput={(params) => (
+                              <TextField
+                                {...params}
+                                fullWidth
+                                variant="outlined"
+                                error={touched.Date_Of_Ownership && Boolean(errors.Date_Of_Ownership)}
+                                helperText={touched.Date_Of_Ownership && errors.Date_Of_Ownership}
+                                className="textbox-root"
+                              />
+                            )}
+                          />
+                        </Grid>
+                        
+                        <Grid item size={{xs:12}}>
+                          <Box textAlign="right" mt={2}>
+                            <Button variant="contained" type="submit" disabled={isSubmitting}
+                            style={{
+                              backgroundColor: '#4b5565',
+                              color: '#fff',
+                              padding: '10px 20px',
+                            }}>
+                              Submit Form
+                            </Button>
+                          </Box>
+                        </Grid>
                       </Grid>
-                      
-                      <Grid item size={{xs:12}}>
-                        <Box textAlign="right" mt={2}>
-                          <Button variant="contained" type="submit"
-                          style={{
-                            backgroundColor: '#4b5565',
-                            color: '#fff',
-                            padding: '10px 20px',
-                          }}>
-                            Submit Form
-                          </Button>
-                        </Box>
-                      </Grid>
-                    </Grid>
-                    </LocalizationProvider>
-                  </form>
+                      </LocalizationProvider>
+                    </Form>
+                  )}
+                </Formik>
               </Box>
             </div>
         </div>

@@ -96,24 +96,24 @@ function ActualGraphScreen() {
                         mb: 2,
                         maxWidth: { xs: "100%", sm: "none" },
                         borderBottom: "1px solid #e0e0e0",
-                        "& .MuiTabs-flexContainer": { justifyContent: "left" }, // Center tabs
-                        "& .MuiTab-root": { // General Tab styles
+                        "& .MuiTabs-flexContainer": { justifyContent: "left" },
+                        "& .MuiTab-root": { 
                             textTransform: "none",
                             fontSize: "14px",
                             padding: "0px 12px",
-                            color: "black", // Default text color
+                            color: "black",
                         },
-                        "& .MuiTab-root.Mui-selected": { // Selected Tab styles
-                            color: "#647c8c", // Highlighted color
+                        "& .MuiTab-root.Mui-selected": { 
+                            color: "#647c8c", 
                             backgroundColor: "#fff",
-                            borderRadius: "8px", // Rounded corners
+                            borderRadius: "8px", 
                         },
-                        "& .MuiTabs-indicator": { // Indicator (underline) styles
+                        "& .MuiTabs-indicator": { 
                             backgroundColor: "#647c8c",
-                            height: "3px", // Custom thickness
+                            height: "3px", 
                         },
                         "& .MuiTabs-scrollButtons": {
-                        display: { xs: "flex", sm: "none" }, // Show scroll buttons only on small viewports
+                        display: { xs: "flex", sm: "none" }, 
                         },
                     }}>
                         <Tab icon={<FinanceLogo/>} iconPosition='start' label="Financial Performance" />

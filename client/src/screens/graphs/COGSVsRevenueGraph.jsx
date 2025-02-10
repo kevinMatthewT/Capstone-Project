@@ -47,7 +47,6 @@ useEffect(() => {
 const options = {
     chart: {
         type: 'bar',
-        stacked: true,
         toolbar: { show: true },
     },
     plotOptions: {
@@ -80,6 +79,15 @@ const options = {
     grid: {
         borderColor: '#e9ecef',
         strokeDashArray: 4,
+    },
+    tooltip: {
+        shared: true,
+        intersect: false,
+        y: {
+        formatter: (value) => {
+            return new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR' }).format(value);
+        },
+        },
     },
     dataLabels: {
         enabled: false,
@@ -158,7 +166,7 @@ const series = [
                 <Chart options={options} series={series} type="bar" height={450} />
             </div>
         </div>
-  )
+    )
 }
 
 export default COGSVsRevenueGraph

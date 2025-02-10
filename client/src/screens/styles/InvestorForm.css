@@ -1,25 +1,33 @@
-.custom-textfield .MuiOutlinedInput-root {
-    height: 45px;
-    font-size: 14px;
-    border-radius: 12px;
-    background-color: #f7f9fc;
-  }
-  
-  .custom-textfield .MuiOutlinedInput-root fieldset {
-    border-radius: 12px;
-  }
-  
-  .custom-textfield .MuiOutlinedInput-root:hover fieldset {
-    border-color: #4b5565;
-  }
-  
-  .custom-textfield .MuiOutlinedInput-root.Mui-focused fieldset {
-    border-color: #4b5565;
-  }
+.typography-label {
+  font-size: 14px !important;
+  font-weight: 600 !important;
+  color: #4b5565 !important;
+}
 
-  .custom-typography {
-    font-size: 14px;
-    font-weight: 600;
-    color: #4b5565;
-  }
+.textbox-root .MuiOutlinedInput-root {
+  height: 45px !important;
+  font-size: 14px !important;
+  border-radius: 12px !important;
+  background-color: #f7f9fc !important;
+  padding: 0px 4px !important; 
+}
+
+.textbox-root .MuiOutlinedInput-root:hover .MuiOutlinedInput-notchedOutline {
+  border-color: #4b5565 !important;
+}
+
+.textbox-root .MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline {
+  border-color: #4b5565 !important; 
+}
+
+.textbox-root.error .MuiOutlinedInput-notchedOutline {
+  border-color: #f44336 !important; 
+}
   
+.textbox-root.error .MuiOutlinedInput-root:hover .MuiOutlinedInput-notchedOutline {
+  border-color: #d32f2f !important; 
+}
+
+.textbox-root.error .MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline {
+  border-color: #d32f2f !important; 
+}

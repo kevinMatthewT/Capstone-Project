@@ -101,7 +101,7 @@ function PredGraphScreen() {
                     mt: 2
                 }}>
                     <h3 style={{ margin:'14px 14px 0 14px', padding: "0 8px", fontSize: '18px', fontWeight: '600', color: 'black'}}>Generate Prediction Graphs</h3>
-                    <h4 style={{ margin: '0 14px 8px 14px', padding: "8px 0 8px 8px", fontSize: '13px', color: '#4b5565'}}> To generate the graphs please input the nessecary informations</h4>
+                    <h4 style={{ margin: '0 14px 8px 14px', padding: "8px 0 8px 8px", fontSize: '13px', color: '#4b5565'}}> To generate the graphs please input the necessary informations</h4>
 
                     <Divider style={{ marginBottom: '16px', backgroundColor: '#eef2f6', width: '100%',}} />
                     

@@ -124,7 +124,7 @@ function InvestorTable({isSidebarOpen}) {
         { field: 'Domicile', headerName: 'Domicile', width: 175},
         { field: 'Year_Of_Operation', headerName: 'Year of Operation', width: 175},
         { field: 'Business', headerName: 'Business', width: 175},
-        { field: 'Percentage_Ownership', headerName: 'Percentage Ownership', width: 175},
+        { field: 'Percentage_Ownership', headerName: 'Percentage Ownership (%)', width: 190},
         { field: 'Revenue', headerName: 'Revenue', width: 175,
           
         },
